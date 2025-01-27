@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from events.forms import EventModelForm
+from events.forms import EventModelForm, ParticipantsModelForm
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -10,18 +10,30 @@ def home(request):
 def dashboard(request):
     return render(request, "dashboard.html")
 
-def create_event(request):
+def create_event(request, id):
     if(request.method == "POST"):
-        event_form = EventModelForm(request.POST)
-        if event_form.is_valid():
-            event_form.save()
+        if id == 1:
+            event_form = EventModelForm(request.POST)
+            if event_form.is_valid():
+                event_form.save()
 
-        messages.success(request, "Event saved successfully.")
-        return redirect("create_event")
+            messages.success(request, "Event saved successfully.")
+            
+        elif id == 2:
+            event_form = ParticipantsModelForm(request.POST)
+            if event_form.is_valid():
+                event_form.save()
+
+            messages.success(request, "Participant created successfully.")
+
+        return redirect("create_event", id)
+        
     else :
         event_form = EventModelForm(request.GET)
+        Participant_form = ParticipantsModelForm(request.GET)
         context = {
-            "form": event_form
+            "form": event_form if id == 1 else Participant_form if id == 2 else "asdf",
+            "id": id
         }
         return render(request, "create_event.html", context)
         
