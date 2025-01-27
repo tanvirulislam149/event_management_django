@@ -1,3 +1,21 @@
 from django.db import models
 
-# Create your models here.
+class Category(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.TextField()
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.TextField()
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField()
+    location = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="events")
+    # participants
+    
+
+class Participant(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=250, unique=True)
+    events = models.ManyToManyField(Event, related_name="participants")
