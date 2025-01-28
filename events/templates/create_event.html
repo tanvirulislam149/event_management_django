@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static "css/output.css" %}">
 </head>
 <body>
-    <h1 class="text-center mt-4 text-4xl font-bold">Create event</h1>
+    <h1 class="text-center mt-4 text-4xl font-bold">Create {% if id == 1 %}event {% elif id == 2 %}participants {% else %} category{% endif %}</h1>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -18,16 +18,9 @@
     </ul>
     {% endif %}
     <div class="w-1/3 mx-auto">
-        <p>{{id}}</p>
         <form class="" method="POST">
             {% csrf_token %}
             {{form}}
-             {% comment %} <label for="">Name:</label>
-            <input type="text" name="" id="" class="border border-gray-400 w-full mb-2 px-2 py-1 text-xl rounded-md">
-            <label for="">Name:</label>
-            <input type="text" name="" id="" class="border border-gray-400 w-full mb-2 px-2 py-1 text-xl rounded-md">
-            <label for="">Name:</label>
-            <input type="text" name="" id="" class="border border-gray-400 w-full mb-2 px-2 py-1 text-xl rounded-md"> {% endcomment %}
             <br>
             <button class="px-4 py-2 rounded-md text-white font-bold bg-red-500" type="submit">Submit</button>
         </form>

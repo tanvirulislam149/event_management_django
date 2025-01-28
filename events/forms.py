@@ -58,3 +58,13 @@ class ParticipantsModelForm(StyledFormMixin, ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.apply_styled_widgets()
+
+
+class CategoryModelForm(StyledFormMixin, ModelForm):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
