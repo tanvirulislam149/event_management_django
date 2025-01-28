@@ -16,6 +16,13 @@ def dashboard(request):
     }
     return render(request, "dashboard.html", context)
 
+def details(request, id):
+    event = Event.objects.get(id = id)
+    context = {
+        "event": event
+    }
+    return render(request, "details.html", context)
+
 def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form

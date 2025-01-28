@@ -52,7 +52,7 @@
               </thead>
               <tbody>
                 {% for event in events %}
-                <tr class="hover:bg-slate-50">
+                <tr class="hover:bg-slate-50 border-b-2">
                     <td class="p-4">
                       <p class="text-sm">
                         {{event.name}}
@@ -94,9 +94,11 @@
                       </a>
                     </td>
                     <td class="p-4">
-                      <a href="#" class="text-sm font-semibold ">
-                        Details
-                      </a>
+                        <a href="{% url "details" event.id %}">
+                            <button class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                                Details
+                            </button>
+                        </a>
                     </td>
                   </tr>
                 {% endfor %}
