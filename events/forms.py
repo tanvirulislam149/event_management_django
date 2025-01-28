@@ -5,7 +5,7 @@ from django import forms
 
 class StyledFormMixin:
 
-    default_styles = "border border-gray-400 w-full mb-2 px-2 py-1 text-lg rounded-md"
+    default_styles = "border border-gray-400 w-full mb-3 mt-1 px-2 py-1 text-lg rounded-md"
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput):
@@ -17,27 +17,28 @@ class StyledFormMixin:
                 field.widget.attrs.update({
                     "class": f"{self.default_styles} resize-none",
                     "placeholder": f"Enter {field.label.lower()}",
-                    "row": 3
+                    "rows": 4
                 })
             elif isinstance(field.widget, forms.EmailInput):
                 field.widget.attrs.update({
                     "class": self.default_styles, 
                     "placeholder": f"Enter {field.label.lower()}"
                 })
-            # elif isinstance(field.widget, forms.CheckboxSelectMultiple):
-            #     field.widget.attrs.update({
-            #         "class": self.default_styles, 
-            #         "placeholder": f"Enter {field.label.lower()}"
-            #     })
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs.update({
+                    "class": self.default_styles, 
+                    "placeholder": f"Enter {field.label.lower()}"
+                })
 
 class EventModelForm(StyledFormMixin, ModelForm):
     class Meta:
         model = Event
-        fields = ["name", "description", "location"]
+        fields = ["name", "description", "location", "category"]
         widgets = {
             "name": widgets.TextInput(),
             "description": widgets.Textarea(),
-            "location": widgets.TextInput()
+            "location": widgets.TextInput(),
+            "category": widgets.Select()
         }
 
     def __init__(self, *args, **kwargs):

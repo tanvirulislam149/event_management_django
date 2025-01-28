@@ -14,13 +14,16 @@ def create_event(request, id):
     if(request.method == "POST"):
         if id == 1:
             event_form = EventModelForm(request.POST)
+            print("check 1")
             if event_form.is_valid():
                 event_form.save()
+                print("check 2")
                 messages.success(request, "Event saved successfully.")
             
         elif id == 2:
             event_form = ParticipantsModelForm(request.POST)
             if event_form.is_valid():
+                print(event_form.cleaned_data)
                 event_form.save()
                 messages.success(request, "Participant created successfully.")
 
