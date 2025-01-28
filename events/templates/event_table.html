@@ -1,0 +1,106 @@
+{% extends "dashboard.html" %}
+{% block table_block %}
+<div class="mb-10 flex">
+  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{event_count}}</span> <br> Events</p>
+  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
+  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{category_count}}</span> <br> Categories</p>
+</div>
+<div class="relative overflow-x-auto flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+  <p class="text-center text-2xl font-bold mb-5">Events</p>
+    <table class="w-full text-left table-auto min-w-max text-slate-800">
+      <thead>
+        <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+                Name
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+              Category
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+              Date 
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+              Time 
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+              Location
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
+              Nums of Participants
+            </p>
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+        <tr class="hover:bg-slate-50 border-b-2">
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.name}}
+              </p>
+            </td>
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.category.name}}
+              </p>
+            </td>
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.date}}
+              </p>
+            </td>
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.time}}
+              </p>
+            </td>
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.location}}
+              </p>
+            </td>
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.nums_of_participants}}
+              </p>
+            </td>
+            <td class="p-4">
+              <a href="{% url "update_event" pageId=1 eventId=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                Edit
+              </a>
+            </td>
+            <td class="p-4">
+                <form action="{% url "delete_event" event.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="text-sm font-bold rounded-full bg-red-300 px-3 py-1.5">
+                        Delete
+                    </button>
+                </form>
+            </td>
+            <td class="p-4">
+                <a href="{% url "details" event.id %}">
+                    <button class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                        Details
+                    </button>
+                </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>   
+{% endblock table_block %}

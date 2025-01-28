@@ -11,10 +11,31 @@ def home(request):
 
 def dashboard(request):
     events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
+    event_count = Event.objects.select_related("category").prefetch_related("participants").count()
+    participant_count = Participant.objects.all().count()
+    category_count = Category.objects.all().count()
+    
     context = {
         "events": events,
+        "event_count": event_count,
+        "participant_count": participant_count,
+        "category_count": category_count
     }
-    return render(request, "dashboard.html", context)
+    return render(request, "event_table.html", context)
+
+def show_participant(request):
+    participants = Participant.objects.all()
+    context = {
+        "participants": participants
+    }
+    return render(request, "participants.html", context)
+
+def show_category(request):
+    category = Category.objects.all()
+    context = {
+        "category": category
+    }
+    return render(request, "category.html", context)
 
 def details(request, id):
     event = Event.objects.get(id = id)
@@ -22,6 +43,7 @@ def details(request, id):
         "event": event
     }
     return render(request, "details.html", context)
+
 
 def create_event(request, pageId):
     if(request.method == "POST"):
@@ -109,3 +131,32 @@ def update_event(request, pageId, eventId):
         }
         return render(request, "create_event.html", context)
         
+def delete_event(request, id):
+    if request.method == "POST":
+        event = Event.objects.get(id = id)
+        event.delete()
+        messages.success(request, "Event deleted")
+        return redirect('dashboard')
+    else:
+        messages.error(request, 'Something went wrong')
+        return redirect('dashboard')
+    
+def delete_participants(request, id):
+    if request.method == "POST":
+        event = Participant.objects.get(id = id)
+        event.delete()
+        messages.success(request, "Participant deleted")
+        return redirect('show_participants')
+    else:
+        messages.error(request, 'Something went wrong')
+        return redirect('show_participants')
+
+def delete_category(request, id):
+    if request.method == "POST":
+        event = Category.objects.get(id = id)
+        event.delete()
+        messages.success(request, "Category deleted")
+        return redirect('show_category')
+    else:
+        messages.error(request, 'Something went wrong')
+        return redirect('show_category')
