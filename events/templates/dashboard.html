@@ -1,11 +1,108 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static "css/output.css" %}">
 </head>
 <body>
     <h1>this is dashboard</h1>
+    {{events}}
+    <div class="p-20">
+        <div class="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+            <table class="w-full text-left table-auto min-w-max text-slate-800">
+              <thead>
+                <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                        Name
+                    </p>
+                  </th>
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                      Category
+                    </p>
+                  </th>
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                      Date 
+                    </p>
+                  </th>
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                      Time 
+                    </p>
+                  </th>
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                      Location
+                    </p>
+                  </th>
+                  <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                      Nums of Participants
+                    </p>
+                  </th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for event in events %}
+                <tr class="hover:bg-slate-50">
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.name}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.category.name}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.date}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.time}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.location}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <p class="text-sm">
+                        {{event.nums_of_participants}}
+                      </p>
+                    </td>
+                    <td class="p-4">
+                      <a href="#" class="text-sm font-semibold ">
+                        Edit
+                      </a>
+                    </td>
+                    <td class="p-4">
+                      <a href="#" class="text-sm font-semibold ">
+                        Delete
+                      </a>
+                    </td>
+                    <td class="p-4">
+                      <a href="#" class="text-sm font-semibold ">
+                        Details
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>          
+    </div>
 </body>
 </html>
