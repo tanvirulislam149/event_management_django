@@ -6,8 +6,6 @@ from events.models import Event, Participant, Category
 from django.db.models import Count
 
 # Create your views here.
-def home(request):
-    return render(request, "home.html")
 
 def dashboard(request):
     events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
