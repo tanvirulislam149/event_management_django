@@ -1,12 +1,22 @@
 {% extends "dashboard.html" %}
 {% block table_block %}
-<div class="mb-10 sm:flex">
-  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{event_count}}</span> <br> Events</p>
-  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
-  <p href="{% url "dashboard" %}" class="w-48 border-2 border-red-300 font-bold text-lg px-2 py-2 my-2 mx-2"><span class="text-6xl">{{category_count}}</span> <br> Categories</p>
+<div class="mb-5 sm:flex gap-5">
+  <p href="{% url "dashboard" %}" class="w-full bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.events}}</span> <br> Events</p>
+  <p href="{% url "dashboard" %}" class="w-full bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
+  <p href="{% url "dashboard" %}" class="w-full bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.upcoming}}</span> <br> Upcoming Events</p>
+  <p href="{% url "dashboard" %}" class="w-full bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.past}}</span> <br> Past Events</p>
 </div>
-<div class="relative overflow-x-auto flex flex-col w-full text-gray-700  shadow-md rounded-lg bg-clip-border">
-  <p class="text-center text-2xl font-bold mb-5">Events</p>
+<div class="bg-gray-100 p-3 my-5">
+  <p class="text-lg font-bold pb-2">Today's Events</p>
+  {% for event in todays_events %}
+    <div class="border-b-2 py-2">
+      <p>Event Name: <span class="font-bold">{{event.name.upper}}</span> Date: {{event.date}}. Location: {{event.location}}</p>
+      {% comment %} <p></p> {% endcomment %}
+    </div>
+  {% endfor %}
+</div>
+<div class="relative overflow-x-auto flex flex-col w-full text-gray-700 rounded-lg bg-clip-border">
+    <p class="text-center text-2xl font-bold mb-5">Events</p>
     <table class="w-full text-left table-auto min-w-max text-slate-800">
       <thead>
         <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">

@@ -4,20 +4,29 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from events.models import Event, Participant, Category
 from django.db.models import Count
+from django.db.models import Q
+from datetime import datetime
 
 # Create your views here.
 
 def dashboard(request):
     events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
-    event_count = Event.objects.select_related("category").prefetch_related("participants").count()
+    event_count = Event.objects.aggregate(
+        events=Count("id"),
+        upcoming = Count("id", filter=Q(date__gt = datetime.now().date())),
+        past = Count("id", filter=Q(date__lt = datetime.now().date())),
+        todays_count = Count("id", filter=Q(date = datetime.now().date()))
+    )
     participant_count = Participant.objects.all().count()
     category_count = Category.objects.all().count()
+    todays_events = Event.objects.filter(date= datetime.now().date())
     
     context = {
         "events": events,
         "event_count": event_count,
         "participant_count": participant_count,
-        "category_count": category_count
+        "category_count": category_count,
+        "todays_events": todays_events
     }
     return render(request, "event_table.html", context)
 
@@ -47,7 +56,6 @@ def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form
             event_form = EventModelForm(request.POST)
-            print(event_form)
             if event_form.is_valid():
                 event_form.save()
                 print("check 2")

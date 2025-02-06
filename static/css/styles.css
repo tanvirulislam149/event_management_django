@@ -3,9 +3,9 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-/* ul.errorlist {
-  display: none;
-} */
+ul.errorlist {
+  display: block;
+}
 
 .logo_font {
   font-family: "Playfair Display", serif;
