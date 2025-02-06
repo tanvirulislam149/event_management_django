@@ -1,151 +1,42 @@
+{% extends "base_home.html" %}
+{% block content %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - Event Management</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <style>
-        .bg_image{
-            background: url({% static "images/banner.png" %});
-            background-size: cover;
-            height: 100vh;
-        }
-    </style>
-  </head>
-  <body>
-    <nav class="bg-gray-50 shadow-md">
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div class="relative flex h-16 items-center justify-between">
-                <div class="flex flex-1 items-center justify-between">
-                  <div>
-                      <p class="text-black text-3xl logo_font">Event Nest</p>
-                  </div>
-                  <div class="hidden sm:ml-6 sm:block">
-                    <div class="flex space-x-4">
-                      <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
-                      <a href="{% url "dashboard" %}" class="rounded-md px-3 py-2 text-md font-medium text-black" aria-current="page">Dashboard</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Team</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Projects</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Calendar</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="inset-y-0 flex items-center sm:hidden">
-                    <!-- Mobile menu button-->
-                    <button onclick="menu_toggle()" type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-black" aria-controls="mobile-menu" aria-expanded="false">
-                    <span class="absolute -inset-0.5"></span>
-                    <span class="sr-only">Open main menu</span>
-                    <!--
-                        Icon when menu is closed.
-            
-                        Menu open: "hidden", Menu closed: "block"
-                    -->
-                    <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                    <!--
-                        Icon when menu is open.
-            
-                        Menu open: "block", Menu closed: "hidden"
-                    -->
-                    <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                    </button>
-                </div>
-            </div>
-          <!-- Mobile menu, show/hide based on menu state. -->
-          <div class="hidden rounded-md bg-black" id="mobile_menu">
-            <div class="space-y-1 px-2 pt-2 pb-3">
-              <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
-              <a href="{% url "dashboard" %}" class="block rounded-md px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
-              <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white">Team asdf</a>
-              <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white">Projects</a>
-              <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-white">Calendar</a>
-            </div>
-          </div>
-      </div>  
-    </nav>
+  <!-- banner  -->
+  <section>
+    <div class="bg_image flex justify-center items-center">
+        <div class="text-white sm:text-7xl text-5xl font-bold banner_font text-center">
+            <p class="mb-2">UNIQUE</p>
+            <p class="mb-2">CREATIVE</p>
+            <p class="mb-2">EXTRA ORDINARY</p>
+        </div>
+    </div>
+ </section>
 
-    <!-- banner  -->
-     <section>
-        <div class="bg_image flex justify-center items-center">
-            <div class="text-white sm:text-7xl text-5xl font-bold banner_font text-center">
-                <p class="mb-2">UNIQUE</p>
-                <p class="mb-2">CREATIVE</p>
-                <p class="mb-2">EXTRA ORDINARY</p>
+ <section class="my-32">
+    <div class="text center">
+        <p class="text-center sm:text-6xl text-3xl banner_font mb-5">Corporate Events</p>
+        <p class="text-center sm:text-xl text-md text-gray-500">From a laid-back company picnic to a Great Gatsby themed holiday party, Event Nest</p>
+        <p class="text-center sm:text-xl text-md text-gray-500">Events delivers a top-notch corporate event that will leave a lasting impression on your attendees.</p>
+    </div>
+    <div class="sm:flex justify-evenly mt-10">
+        <div class="flex justify-center mb-4">
+            <div>
+                <img width="350" src="{% static 'images/annual_meetings.png' %}" alt="">
+                <p class="text-center text-2xl font-bold mt-3">Annual Meetings</p>
             </div>
         </div>
-     </section>
-
-     <section class="my-32">
-        <div class="text center">
-            <p class="text-center sm:text-6xl text-3xl banner_font mb-5">Corporate Events</p>
-            <p class="text-center sm:text-xl text-md text-gray-500">From a laid-back company picnic to a Great Gatsby themed holiday party, Event Nest</p>
-            <p class="text-center sm:text-xl text-md text-gray-500">Events delivers a top-notch corporate event that will leave a lasting impression on your attendees.</p>
-        </div>
-        <div class="sm:flex justify-evenly mt-10">
-            <div class="flex justify-center mb-4">
-                <div>
-                    <img width="350" src="{% static "images/annual_meetings.png" %}" alt="">
-                    <p class="text-center text-2xl font-bold mt-3">Annual Meetings</p>
-                </div>
-            </div>
-            <div class="flex justify-center"> 
-                <div>
-                    <img width="350" src="{% static "images/award_dinners.png" %}" alt="">
-                    <p class="text-center text-2xl font-bold mt-3">Award Dinners</p>
-                </div>
-            </div>
-            <div class="flex justify-center">
-                <div>
-                    <img width="350" src="{% static "images/holiday_parties.png" %}" alt="">
-                    <p class="text-center text-2xl font-bold mt-3">Holiday Parties</p>
-                </div>
+        <div class="flex justify-center"> 
+            <div>
+                <img width="350" src="{% static 'images/award_dinners.png' %}" alt="">
+                <p class="text-center text-2xl font-bold mt-3">Award Dinners</p>
             </div>
         </div>
-     </section>
-
-
-      
-    {% comment %} <p class="text-red-600 text-4xl font-bold text-center mt-52">Welcome to Event Management</p>
-    <p class="text-center underline"><a class="text-red-600 text-xl font-bold text-center" href="{% url "dashboard" %}">Go to dashboard</a></p> {% endcomment %}
-
-
-    
-
-     {% comment %} footer  {% endcomment %}
-     <section>
-        <div class="bg-black py-10 px-3 banner_font">
-            <p class="text-white text-center text-xl">info@eventnest.com</p>
-            <p class="text-white text-center text-xl">Copyright - 2025 | Event Nest</p>
+        <div class="flex justify-center">
+            <div>
+                <img width="350" src="{% static 'images/holiday_parties.png' %}" alt="">
+                <p class="text-center text-2xl font-bold mt-3">Holiday Parties</p>
+            </div>
         </div>
-      </section>
-
-
-    <script>
-        function menu_toggle() {
-            const mobile_menu = document.getElementById("mobile_menu");
-            const sidebarVisibility = mobile_menu.classList.contains("hidden");
-    
-            // Show or hide the mobile_menu based on its current state
-            if (sidebarVisibility) {
-              mobile_menu.classList.remove("hidden");
-              mobile_menu.classList.add("fixed");
-              mobile_menu.classList.add("right-[10px]");
-              mobile_menu.classList.add("z-50");
-            } else {
-              mobile_menu.classList.add("hidden");
-              mobile_menu.classList.remove("fixed");
-              mobile_menu.classList.remove("z-50");
-            }
-          }
-    </script>
-  </body>
-</html>
+    </div>
+ </section>
+{% endblock content %}
