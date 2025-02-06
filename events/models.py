@@ -10,8 +10,8 @@ class Category(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
-    date = models.DateField(auto_now_add=True)
-    time = models.TimeField(auto_now_add=True)
+    date = models.DateField()
+    time = models.TimeField()
     location = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="events", default = 1)
     # participants

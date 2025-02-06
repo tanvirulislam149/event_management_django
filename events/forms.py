@@ -5,7 +5,12 @@ from django import forms
 
 class StyledFormMixin:
 
-    default_styles = "border border-gray-400 w-full mb-3 mt-1 px-2 py-1 text-lg rounded-md"
+    default_styles = "border border-gray-400 w-full mb-3 mt-1 px-2 py-2 text-lg"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput):
@@ -29,21 +34,32 @@ class StyledFormMixin:
                     "class": self.default_styles, 
                     "placeholder": f"Enter {field.label.lower()}"
                 })
+            elif isinstance(field.widget, forms.SelectDateWidget):
+                field.widget.attrs.update({
+                    "class": self.default_styles, 
+                    "placeholder": f"Enter {field.label.lower()}"
+                })
+            elif isinstance(field.widget, forms.TimeInput):
+                field.widget.attrs.update({
+                    "class": self.default_styles, 
+                    # "placeholder": f"Enter {field.label.lower()}"
+                    "placeholder": "04:05 am"
+                })
 
 class EventModelForm(StyledFormMixin, ModelForm):
     class Meta:
         model = Event
-        fields = ["name", "description", "location", "category"]
+        fields = ["name", "description", "location", "category", "date", "time"]
         widgets = {
             "name": widgets.TextInput(),
             "description": widgets.Textarea(),
             "location": widgets.TextInput(),
-            "category": widgets.Select()
+            "category": widgets.Select(),
+            "date": widgets.SelectDateWidget(),
+            "time": widgets.TimeInput(attrs={'type': 'time'})
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
+
 
 class ParticipantsModelForm(StyledFormMixin, ModelForm):
     class Meta:
@@ -56,16 +72,8 @@ class ParticipantsModelForm(StyledFormMixin, ModelForm):
             "events": widgets.CheckboxSelectMultiple()
         }
         
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
-
 
 class CategoryModelForm(StyledFormMixin, ModelForm):
     class Meta:
         model = Category
         fields = "__all__"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()

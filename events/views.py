@@ -47,7 +47,7 @@ def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form
             event_form = EventModelForm(request.POST)
-            print("check 1")
+            print(event_form)
             if event_form.is_valid():
                 event_form.save()
                 print("check 2")
@@ -56,7 +56,6 @@ def create_event(request, pageId):
         elif pageId == 2:  # 2 ==> shows create participant form
             event_form = ParticipantsModelForm(request.POST)
             if event_form.is_valid():
-                print(event_form.cleaned_data)
                 event_form.save()
                 messages.success(request, "Participant created successfully.")
 
