@@ -117,14 +117,14 @@ def update_event(request, pageId, eventId):
             if event_form.is_valid():
                 print(event_form.cleaned_data)
                 event_form.save()
-                messages.success(request, "Participant created successfully.")
+                messages.success(request, "Participant updated successfully.")
 
         elif pageId == 3:
             event = Category.objects.get(id = eventId)
             event_form = CategoryModelForm(request.POST, instance = event)
             if event_form.is_valid():
                 event_form.save()
-                messages.success(request, "Category created successfully.")
+                messages.success(request, "Category updated successfully.")
 
         return redirect("update_event", pageId = pageId, eventId = eventId)
         
