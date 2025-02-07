@@ -1,0 +1,32 @@
+{% extends "base_home.html" %}
+{% block content %}
+<div class="sm:w-1/2 w-full mx-auto px-5 mt-5">
+    <h1 class="text-center text-3xl font-bold">Register Your Account</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% for error in field.errors %}
+                    <div class="bg-red-500 px-3 text-white py-1 font-bold mb-3">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        
+        {% for error in form.non_field_errors %}
+            <div class="bg-red-500 px-3 text-white py-1 font-bold mb-3">{{ error }}</div>
+        {% endfor %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="bg-green-500 px-3 py-1 font-bold mb-3">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <button class="bg-red-300 px-2 py-1" type="submit">Register</button>
+    </form>
+</div>
+{% endblock content %}

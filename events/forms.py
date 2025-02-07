@@ -24,6 +24,12 @@ class StyledFormMixin:
                     "placeholder": f"Enter {field.label.lower()}",
                     "rows": 4
                 })
+            elif isinstance(field.widget, forms.PasswordInput):
+                field.widget.attrs.update({
+                    "class": f"{self.default_styles} resize-none",
+                    "placeholder": f"Enter {field.label.lower()}",
+                    "rows": 4
+                })
             elif isinstance(field.widget, forms.EmailInput):
                 field.widget.attrs.update({
                     "class": self.default_styles, 
