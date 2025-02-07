@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from users.forms import CustomRegisterForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -33,3 +33,8 @@ def user_login(request):
 
 
     return render(request, "login.html")
+
+def user_logout(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("home")
