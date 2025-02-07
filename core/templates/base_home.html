@@ -30,9 +30,12 @@
                     <div class="flex space-x-4">
                       <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
                       <a href="{% url "dashboard" %}" class="rounded-md px-3 py-2 text-md font-medium text-black" aria-current="page">Dashboard</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Team</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Projects</a>
-                      <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black">Calendar</a>
+                      {% if user.is_authenticated %}
+                        <a href="#" class="rounded-md px-3 py-2 text-md font-medium text-black border border-black">{{user.username}}</a>
+                        <button>Log out</button>
+                      {% else %}
+                        <a href="{% url "login" %}" class="rounded-md px-3 py-2 text-md font-medium text-black">Login</a>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,21 @@
+{% extends "base_home.html" %}
+{% block content %}
+<div class="sm:w-1/2 w-full mx-auto px-5 mt-5">
+    <h1 class="text-center text-3xl font-bold">Login Your Account</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="">Username:</label>
+        <input class="border border-gray-400 w-full mb-3 mt-1 px-2 py-2 text-lg" placeholder="Enter your username" type="text" name="username" id="">
+        <label for="">Password</label>
+        <input class="border border-gray-400 w-full mb-3 mt-1 px-2 py-2 text-lg" type="password" placeholder="Enter your password" name="password" id="">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="bg-red-500 text-white px-3 py-1 font-bold mb-3">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <button class="bg-red-400 px-3 py-1 text-white" type="submit">Login</button>
+    </form>
+</div>
+{% endblock content %}
