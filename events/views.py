@@ -21,6 +21,16 @@ def dashboard(request):
     category_count = Category.objects.all().count()
     todays_events = Event.objects.filter(date= datetime.now().date())
     
+    upcoming = request.GET.get("upcoming")
+    past = request.GET.get("past")
+    if upcoming:
+        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants" )).filter(date__gt = datetime.now().date())
+        print(events)
+    elif past:
+        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
+    else:
+        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
+    
     context = {
         "events": events,
         "event_count": event_count,
@@ -29,6 +39,9 @@ def dashboard(request):
         "todays_events": todays_events
     }
     return render(request, "event_table.html", context)
+
+def show_upcoming_events(request):
+    pass
 
 def show_participant(request):
     participants = Participant.objects.all()
