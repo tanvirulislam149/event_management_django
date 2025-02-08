@@ -1,35 +1,36 @@
 from django.shortcuts import render
-from events.forms import EventModelForm, ParticipantsModelForm, CategoryModelForm
+from events.forms import EventModelForm, CategoryModelForm
 from django.shortcuts import redirect
 from django.contrib import messages
-from events.models import Event, Participant, Category
+from events.models import Event, Category
 from django.db.models import Count
 from django.db.models import Q
 from datetime import datetime
+from django.contrib.auth.models import User
 
 # Create your views here.
 
 def dashboard(request):
-    events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
+    events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
     event_count = Event.objects.aggregate(
         events=Count("id"),
         upcoming = Count("id", filter=Q(date__gt = datetime.now().date())),
         past = Count("id", filter=Q(date__lt = datetime.now().date())),
         todays_count = Count("id", filter=Q(date = datetime.now().date()))
     )
-    participant_count = Participant.objects.all().count()
+    participant_count = User.objects.all().count()
     category_count = Category.objects.all().count()
     todays_events = Event.objects.filter(date= datetime.now().date())
     
     upcoming = request.GET.get("upcoming")
     past = request.GET.get("past")
     if upcoming:
-        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants" )).filter(date__gt = datetime.now().date())
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__gt = datetime.now().date())
         print(events)
     elif past:
-        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
     else:
-        events = Event.objects.select_related("category").prefetch_related("participants").annotate(nums_of_participants=Count("participants")).all()
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
     
     context = {
         "events": events,
@@ -40,11 +41,11 @@ def dashboard(request):
     }
     return render(request, "event_table.html", context)
 
-def show_upcoming_events(request):
-    pass
+# def show_upcoming_events(request):
+#     pass
 
 def show_participant(request):
-    participants = Participant.objects.all()
+    participants = User.objects.all()
     context = {
         "participants": participants
     }
@@ -58,7 +59,7 @@ def show_category(request):
     return render(request, "category.html", context)
 
 def details(request, id):
-    event = Event.objects.get(id = id)
+    event = Event.objects.select_related("category").prefetch_related("participants").get(id = id)
     context = {
         "event": event
     }
@@ -74,11 +75,11 @@ def create_event(request, pageId):
                 print("check 2")
                 messages.success(request, "Event saved successfully.")
             
-        elif pageId == 2:  # 2 ==> shows create participant form
-            event_form = ParticipantsModelForm(request.POST)
-            if event_form.is_valid():
-                event_form.save()
-                messages.success(request, "Participant created successfully.")
+        # elif pageId == 2:  # 2 ==> shows create participant form
+        #     event_form = ParticipantsModelForm(request.POST)
+        #     if event_form.is_valid():
+        #         event_form.save()
+        #         messages.success(request, "Participant created successfully.")
 
         elif pageId == 3:
             event_form = CategoryModelForm(request.POST)
@@ -90,11 +91,11 @@ def create_event(request, pageId):
         
     else :
         event_form = EventModelForm()
-        Participant_form = ParticipantsModelForm()
+        # Participant_form = ParticipantsModelForm()
         cat_form = CategoryModelForm()
         context = {
             "type": "create",
-            "form": event_form if pageId == 1 else Participant_form if pageId == 2 else cat_form,
+            "form": event_form if pageId == 1 else cat_form,
             "pageId": pageId
         }
         return render(request, "create_event.html", context)
@@ -111,13 +112,13 @@ def update_event(request, pageId, eventId):
                 print("check 2")
                 messages.success(request, "Event saved successfully.")
             
-        elif pageId == 2:
-            event = Participant.objects.get(id = eventId)
-            event_form = ParticipantsModelForm(request.POST, instance = event)
-            if event_form.is_valid():
-                print(event_form.cleaned_data)
-                event_form.save()
-                messages.success(request, "Participant updated successfully.")
+        # elif pageId == 2:
+        #     event = User.objects.get(id = eventId)
+        #     event_form = ParticipantsModelForm(request.POST, instance = event)
+        #     if event_form.is_valid():
+        #         print(event_form.cleaned_data)
+        #         event_form.save()
+        #         messages.success(request, "Participant updated successfully.")
 
         elif pageId == 3:
             event = Category.objects.get(id = eventId)
@@ -133,18 +134,18 @@ def update_event(request, pageId, eventId):
             event = Event.objects.get(id = eventId)
             
         elif pageId == 2:
-            event = Participant.objects.get(id = eventId)
+            event = User.objects.get(id = eventId)
             
         elif pageId == 3:
             event = Category.objects.get(id = eventId)
             
         print(event)
         event_form = EventModelForm(instance = event)
-        Participant_form = ParticipantsModelForm(instance = event)
+        # Participant_form = ParticipantsModelForm(instance = event)
         cat_form = CategoryModelForm(instance = event)
         context = {
             "type": "update",
-            "form": event_form if pageId == 1 else Participant_form if pageId == 2 else cat_form,
+            "form": event_form if pageId == 1 else cat_form,
             "pageId": pageId
         }
         return render(request, "create_event.html", context)
@@ -161,7 +162,7 @@ def delete_event(request, id):
     
 def delete_participants(request, id):
     if request.method == "POST":
-        event = Participant.objects.get(id = id)
+        event = User.objects.get(id = id)
         event.delete()
         messages.success(request, "Participant deleted")
         return redirect('show_participants')

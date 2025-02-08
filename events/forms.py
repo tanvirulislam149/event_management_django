@@ -1,7 +1,8 @@
 from django.forms import ModelForm 
-from events.models import Event, Participant, Category
+from events.models import Event, Category
 from django.forms import widgets
 from django import forms
+from django.contrib.auth.models import User
 
 class StyledFormMixin:
 
@@ -38,7 +39,7 @@ class StyledFormMixin:
             elif isinstance(field.widget, forms.Select):
                 field.widget.attrs.update({
                     "class": self.default_styles, 
-                    "placeholder": f"Enter {field.label.lower()}"
+                    "placeholder": f"Enter {field.label}"
                 })
             elif isinstance(field.widget, forms.SelectDateWidget):
                 field.widget.attrs.update({
@@ -49,34 +50,39 @@ class StyledFormMixin:
                 field.widget.attrs.update({
                     "class": self.default_styles, 
                     # "placeholder": f"Enter {field.label.lower()}"
-                    "placeholder": "04:05 am"
                 })
 
 class EventModelForm(StyledFormMixin, ModelForm):
+    participants = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        required=False
+    )
+    
     class Meta:
         model = Event
-        fields = ["name", "description", "location", "category", "date", "time"]
+        fields = ["name", "description", "location", "category", "date", "time", "participants"]
         widgets = {
             "name": widgets.TextInput(),
             "description": widgets.Textarea(),
             "location": widgets.TextInput(),
             "category": widgets.Select(),
             "date": widgets.SelectDateWidget(),
-            "time": widgets.TimeInput(attrs={'type': 'time'})
+            "time": widgets.TimeInput(attrs={'type': 'time'}),
+            "participants": widgets.CheckboxSelectMultiple()
         }
 
 
 
-class ParticipantsModelForm(StyledFormMixin, ModelForm):
-    class Meta:
-        model = Participant
-        # fields = ["name", "email"]
-        fields = "__all__"
-        widgets = {
-            "name": widgets.TextInput(),
-            "email": widgets.EmailInput(),
-            "events": widgets.CheckboxSelectMultiple()
-        }
+# class ParticipantsModelForm(StyledFormMixin, ModelForm):
+#     class Meta:
+#         model = Participant
+#         # fields = ["name", "email"]
+#         fields = "__all__"
+#         widgets = {
+#             "name": widgets.TextInput(),
+#             "email": widgets.EmailInput(),
+#             "events": widgets.CheckboxSelectMultiple()
+#         }
         
 
 class CategoryModelForm(StyledFormMixin, ModelForm):

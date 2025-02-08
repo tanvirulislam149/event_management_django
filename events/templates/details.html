@@ -10,7 +10,7 @@
             <ul class="list-disc ps-10">
                 {% if event.participants.all %}
                     {% for p in event.participants.all %}
-                        <li>{{p.name}}</li>
+                        <li>{{p.username}}</li>
                     {% endfor %}
                 {% else %}
                     <li>None</li>
