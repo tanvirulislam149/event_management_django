@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator 
 from users.forms import CreateGroupForm
 
@@ -61,3 +61,19 @@ def create_group(request):
     else:
         form = CreateGroupForm()
         return render(request, "admin/create_group.html", {"form": form})
+    
+# def update_or_delete_group(request, id):
+    
+#     if request.method == "POST":
+#         form = CreateGroupForm(request.POST)
+#         if form.is_valid:
+#             form.save()
+#             messages.success(request, "Role created.")
+#             return redirect("create_group")
+#         else:
+#             form = CreateGroupForm()
+#             return render(request, "admin/create_group.html", {"form": form})
+
+def show_group(request):
+    groups = Group.objects.all()
+    return render(request, "admin/show_groups.html", {"groups": groups})
