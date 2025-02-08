@@ -19,44 +19,19 @@ def is_admin(user):
 def is_organizer_or_admin(user):
     return user.groups.filter(name="Organizer").exists() or user.groups.filter(name="Admin").exists()
 
+def is_user(user):
+    return user.groups.filter(name="User").exists()
 
 
 @login_required
-@user_passes_test(is_organizer_or_admin)
+# @user_passes_test(is_organizer_or_admin)
 def dashboard(request):
-    events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
-    event_count = Event.objects.aggregate(
-        events=Count("id"),
-        upcoming = Count("id", filter=Q(date__gt = datetime.now().date())),
-        past = Count("id", filter=Q(date__lt = datetime.now().date())),
-        todays_count = Count("id", filter=Q(date = datetime.now().date()))
-    )
-    participant_count = User.objects.all().count()
-    category_count = Category.objects.all().count()
-    todays_events = Event.objects.filter(date= datetime.now().date())
-    
-    upcoming = request.GET.get("upcoming")
-    past = request.GET.get("past")
-    if upcoming:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__gt = datetime.now().date())
-        print(events)
-    elif past:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
-    else:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
-    
-    context = {
-        "events": events,
-        "event_count": event_count,
-        "participant_count": participant_count,
-        "category_count": category_count,
-        "todays_events": todays_events
-    }
-    return render(request, "event_table.html", context)
+    if is_user(request.user):
+        context = {
+            "is_user": True
+        }
+        return render(request, "event_table.html", context)
 
-@login_required
-@user_passes_test(is_organizer_or_admin)
-def organizer_dashboard(request):
     events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
     event_count = Event.objects.aggregate(
         events=Count("id"),
@@ -83,7 +58,9 @@ def organizer_dashboard(request):
         "event_count": event_count,
         "participant_count": participant_count,
         "category_count": category_count,
-        "todays_events": todays_events
+        "todays_events": todays_events,
+        "is_admin": is_admin(request.user),
+        "is_organizer": is_organizer_or_admin(request.user),
     }
     return render(request, "event_table.html", context)
 

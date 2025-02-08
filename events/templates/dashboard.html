@@ -1,26 +1,44 @@
 {% extends "base_home.html" %}
 {% block content %}
-    <div class="pt-0">
-        <button onclick="sidebarToggle()" class="block sm:hidden mt-10 mx-4">
-            <svg class="block size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-        </button>
-        <div class="flex">
-            <div id="sidebar" class="w-3/4 sm:mt-6 mt-2 pt-1 sm:w-1/6 bg-gray-100 h-screen hidden sm:block">
-                <a href="{% url "create_event" pageId=1 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Event</a>
-                <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Events</a>
-                <a href="{% url "create_event" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
-                <a href="{% url "show_category" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Category</a>
-                <a href="{% url "show_participants" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Participants</a>
-                <a href="{% url "create_group" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Group</a>
-                <a href="{% url "show_group" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Group</a>
-                
-            </div>
-            <div class="w-full sm:w-5/6 p-4 sm:pt-10">
-                {% block table_block %}
-                {% endblock table_block %}
+    {% if is_user %}
+        <div>
+            <h1>This is user dashboard</h1>
+        </div>
+    {% else %}
+        <div class="pt-0">
+            <button onclick="sidebarToggle()" class="block sm:hidden mt-10 mx-4">
+                <svg class="block size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+            <div class="flex">
+                <div id="sidebar" class="w-3/4 sm:mt-6 mt-2 pt-1 sm:w-1/6 bg-gray-100 h-screen hidden sm:block">
+                    {% if is_admin %}
+                        <a href="{% url "create_event" pageId=1 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Event</a>
+                        <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Events</a>
+                        <a href="{% url "create_event" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
+                        <a href="{% url "show_category" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Category</a>
+                        <a href="{% url "show_participants" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Participants</a>
+                        <a href="{% url "create_group" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Group</a>
+                        <a href="{% url "show_group" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Group</a>
+                    {% elif is_organizer %}
+                        <a href="{% url "create_event" pageId=1 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Event</a>
+                        <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Events</a>
+                        <a href="{% url "create_event" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
+                        <a href="{% url "show_category" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Category</a>
+                    {% endif %}
+                    {% comment %} {% if user.groups.first == "Admin" %}
+                        <p>Admin ache</p>
+                    {% else %}
+                        <p>Admin nai</p>
+                    {% endif %}
+                    {{user.groups.first}} {% endcomment %}
+                </div>
+                <div class="w-full sm:w-5/6 p-4 sm:pt-10">
+                    {% block table_block %}
+                    {% endblock table_block %}
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock content %}
