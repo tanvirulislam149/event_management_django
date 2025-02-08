@@ -62,17 +62,24 @@ def create_group(request):
         form = CreateGroupForm()
         return render(request, "admin/create_group.html", {"form": form})
     
-# def update_or_delete_group(request, id):
-    
-#     if request.method == "POST":
-#         form = CreateGroupForm(request.POST)
-#         if form.is_valid:
-#             form.save()
-#             messages.success(request, "Role created.")
-#             return redirect("create_group")
-#         else:
-#             form = CreateGroupForm()
-#             return render(request, "admin/create_group.html", {"form": form})
+def update_group(request, id):
+    group = Group.objects.get(id = id)
+    if request.method == "POST":
+        form = CreateGroupForm(request.POST, instance = group)
+        if form.is_valid:
+            form.save()
+            messages.success(request, "Role updated.")
+            return redirect("create_group")
+    else:
+        form = CreateGroupForm(instance = group)
+        return render(request, "admin/create_group.html", {"form": form})
+
+def delete_group(request, id):
+    if request.method == "POST":
+        group = Group.objects.get(id = id)
+        group.delete()
+        return redirect("show_group")
+
 
 def show_group(request):
     groups = Group.objects.all()
