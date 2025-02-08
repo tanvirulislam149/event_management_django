@@ -4,6 +4,7 @@ from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator 
+from users.forms import CreateGroupForm
 
 
 
@@ -49,3 +50,14 @@ def activate_link(request, user_id, token):
         return redirect("login")
     else:
         return render("Invalid token or id")
+    
+def create_group(request):
+    if request.method == "POST":
+        form = CreateGroupForm(request.POST)
+        if form.is_valid:
+            form.save()
+            messages.success(request, "Role created.")
+            return redirect("create_group")
+    else:
+        form = CreateGroupForm()
+        return render(request, "admin/create_group.html", {"form": form})

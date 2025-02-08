@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
 from events.forms import StyledFormMixin 
 from django.core.exceptions import ValidationError
+from django import forms
 
 class CustomRegisterForm(StyledFormMixin, UserCreationForm):
     class Meta:
@@ -19,3 +20,14 @@ class CustomRegisterForm(StyledFormMixin, UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise ValidationError("Email already in use.")
         return email
+    
+class CreateGroupForm(StyledFormMixin, forms.ModelForm):
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+
+    class Meta:
+        model = Group
+        fields = ['name', 'permissions']
