@@ -4,7 +4,7 @@ from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator 
-from users.forms import CreateGroupForm
+from users.forms import CreateGroupForm, ChangeGroupForm
 
 
 
@@ -54,7 +54,7 @@ def activate_link(request, user_id, token):
 def create_group(request):
     if request.method == "POST":
         form = CreateGroupForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
             messages.success(request, "Role created.")
             return redirect("create_group")
@@ -66,7 +66,7 @@ def update_group(request, id):
     group = Group.objects.get(id = id)
     if request.method == "POST":
         form = CreateGroupForm(request.POST, instance = group)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
             messages.success(request, "Role updated.")
             return redirect("create_group")
@@ -84,3 +84,21 @@ def delete_group(request, id):
 def show_group(request):
     groups = Group.objects.all()
     return render(request, "admin/show_groups.html", {"groups": groups})
+
+def change_role(request, id):
+    user = User.objects.get(id = id)
+    if request.method == "POST":
+        form = ChangeGroupForm(request.POST)
+        print(user)
+        if form.is_valid():
+            role = form.cleaned_data.get('role')
+            print(role)
+            user.groups.clear()
+            user.groups.add(role)
+            user.save()
+            messages.success(request, "Role changed.")
+            return redirect("change_role", id)
+
+    else:
+        form = ChangeGroupForm()
+        return render(request, "admin/change_role.html", {"form": form})
