@@ -7,10 +7,56 @@ from django.db.models import Count
 from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 # Create your views here.
 
+
+def is_admin(user):
+    return user.groups.filter(name="Admin").exists()
+
+
+def is_organizer_or_admin(user):
+    return user.groups.filter(name="Organizer").exists() or user.groups.filter(name="Admin").exists()
+
+
+
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def dashboard(request):
+    events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
+    event_count = Event.objects.aggregate(
+        events=Count("id"),
+        upcoming = Count("id", filter=Q(date__gt = datetime.now().date())),
+        past = Count("id", filter=Q(date__lt = datetime.now().date())),
+        todays_count = Count("id", filter=Q(date = datetime.now().date()))
+    )
+    participant_count = User.objects.all().count()
+    category_count = Category.objects.all().count()
+    todays_events = Event.objects.filter(date= datetime.now().date())
+    
+    upcoming = request.GET.get("upcoming")
+    past = request.GET.get("past")
+    if upcoming:
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__gt = datetime.now().date())
+        print(events)
+    elif past:
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
+    else:
+        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
+    
+    context = {
+        "events": events,
+        "event_count": event_count,
+        "participant_count": participant_count,
+        "category_count": category_count,
+        "todays_events": todays_events
+    }
+    return render(request, "event_table.html", context)
+
+@login_required
+@user_passes_test(is_organizer_or_admin)
+def organizer_dashboard(request):
     events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
     event_count = Event.objects.aggregate(
         events=Count("id"),
@@ -44,6 +90,8 @@ def dashboard(request):
 # def show_upcoming_events(request):
 #     pass
 
+@login_required
+@user_passes_test(is_admin)
 def show_participant(request):
     participants = User.objects.all()
     context = {
@@ -51,12 +99,15 @@ def show_participant(request):
     }
     return render(request, "participants.html", context)
 
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def show_category(request):
     category = Category.objects.all()
     context = {
         "category": category
     }
     return render(request, "category.html", context)
+
 
 def details(request, id):
     event = Event.objects.select_related("category").prefetch_related("participants").get(id = id)
@@ -65,7 +116,8 @@ def details(request, id):
     }
     return render(request, "details.html", context)
 
-
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form
@@ -99,7 +151,9 @@ def create_event(request, pageId):
             "pageId": pageId
         }
         return render(request, "create_event.html", context)
-        
+
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def update_event(request, pageId, eventId):
     event = None
     if(request.method == "POST"):
@@ -150,6 +204,8 @@ def update_event(request, pageId, eventId):
         }
         return render(request, "create_event.html", context)
         
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def delete_event(request, id):
     if request.method == "POST":
         event = Event.objects.get(id = id)
@@ -159,7 +215,9 @@ def delete_event(request, id):
     else:
         messages.error(request, 'Something went wrong')
         return redirect('dashboard')
-    
+
+@login_required
+@user_passes_test(is_admin)
 def delete_participants(request, id):
     if request.method == "POST":
         event = User.objects.get(id = id)
@@ -170,6 +228,8 @@ def delete_participants(request, id):
         messages.error(request, 'Something went wrong')
         return redirect('show_participants')
 
+@login_required
+@user_passes_test(is_organizer_or_admin)
 def delete_category(request, id):
     if request.method == "POST":
         event = Category.objects.get(id = id)

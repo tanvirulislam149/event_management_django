@@ -5,10 +5,29 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator 
 from users.forms import CreateGroupForm, ChangeGroupForm
+from django.contrib.auth.decorators import login_required, user_passes_test
 
+
+
+def is_admin(user):
+    return user.groups.filter(name="Admin").exists()
+
+
+def is_organizer_or_admin(user):
+    return user.groups.filter(name="Organizer").exists() or user.groups.filter(name="Admin").exists()
 
 
 # Create your views here.
+
+def dashboard_redirect(request):
+    if is_admin(request.user):
+        return redirect("dashboard")
+    elif is_organizer_or_admin(request.user):
+        return redirect("organizer_dashboard")
+    else:
+        return redirect("user_dashboard")
+
+
 def register(request):
     form = CustomRegisterForm()
     if request.method == "POST":
@@ -36,6 +55,7 @@ def user_login(request):
 
     return render(request, "login.html")
 
+@login_required
 def user_logout(request):
     if request.method == "POST":
         logout(request)
@@ -51,6 +71,8 @@ def activate_link(request, user_id, token):
     else:
         return render("Invalid token or id")
     
+@login_required
+@user_passes_test(is_admin)
 def create_group(request):
     if request.method == "POST":
         form = CreateGroupForm(request.POST)
@@ -62,6 +84,8 @@ def create_group(request):
         form = CreateGroupForm()
         return render(request, "admin/create_group.html", {"form": form})
     
+@login_required
+@user_passes_test(is_admin)
 def update_group(request, id):
     group = Group.objects.get(id = id)
     if request.method == "POST":
@@ -74,6 +98,8 @@ def update_group(request, id):
         form = CreateGroupForm(instance = group)
         return render(request, "admin/create_group.html", {"form": form})
 
+@login_required
+@user_passes_test(is_admin)
 def delete_group(request, id):
     if request.method == "POST":
         group = Group.objects.get(id = id)
@@ -81,10 +107,14 @@ def delete_group(request, id):
         return redirect("show_group")
 
 
+@login_required
+@user_passes_test(is_admin)
 def show_group(request):
     groups = Group.objects.all()
     return render(request, "admin/show_groups.html", {"groups": groups})
 
+@login_required
+@user_passes_test(is_admin)
 def change_role(request, id):
     user = User.objects.get(id = id)
     if request.method == "POST":
