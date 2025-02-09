@@ -10,7 +10,7 @@ from decouple import config
 def send_activation_mail(sender, instance, created, **kwargs):
     if created:
         token = default_token_generator.make_token(instance)
-        activation_link = f"{config("FRONTEND_URL")}/users/activate/{instance.id}/{token}"
+        activation_link = f"{config('FRONTEND_URL')}/users/activate/{instance.id}/{token}"
         message = f"Please activate your account by clicking this link - {activation_link}"
         
         try:
