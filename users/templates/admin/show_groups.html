@@ -1,0 +1,65 @@
+{% extends "dashboard.html" %}
+{% block table_block %}
+<div>
+    <h1 class="text-3xl font-bold text-center my-4">Show groups</h1>
+    <table class="w-full text-left table-auto min-w-max text-slate-800">
+        <thead>
+            <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
+                <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                        Name
+                    </p>
+                </th>
+                <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                    Permissions
+                    </p>
+                </th>
+                <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                    </p>
+                </th>
+                <th class="p-4">
+                    <p class="text-sm leading-none font-bold">
+                    </p>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+            <tr class="hover:bg-slate-50 border-b-2">
+                <td class="p-4">
+                    <p class="text-sm">
+                        {{group.name}}
+                    </p>
+                </td>
+                <td class="p-4">
+                    <p class="text-sm">
+                        {% for permission in group.permissions.all %}
+                            <li>{{permission}}</li>
+                        {% endfor %}
+                    </p>
+                </td>
+                <td class="p-4">
+                    <td class="p-4">
+                        <a href="{% url "update_group" id=group.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                          Edit
+                        </a>
+                    </td>
+                </td>
+                <td class="p-4">
+                    <p class="text-sm">
+                        <form action="{% url "delete_group" id=group.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="text-sm font-bold rounded-full bg-red-300 px-3 py-1.5">
+                                Delete
+                            </button>
+                        </form>
+                    </p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock table_block %}

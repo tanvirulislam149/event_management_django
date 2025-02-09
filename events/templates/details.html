@@ -1,26 +1,32 @@
+{% extends "base_home.html" %}
+{% block content %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
-    <link rel="stylesheet" href="{% static "css/output.css" %}">
-</head>
-<body class="flex justify-center mt-20">
-    <div class="w-1/2">
-        <p class="text-6xl font-bold mb-5">{{event.name}}</p>
+<div class="sm:flex justify-center mt-20 sm:mx-20 m-2">
+    <div class="sm:w-1/2 w-full">
+        {% if event.image %}
+            <img class="w-full" src="{{event.image.url}}" alt="">
+        {% else %}
+            <img class="w-full" src="{% static "images/default_image.jpg" %}" alt="">
+        {% endif %}
+    </div>
+    <div class="sm:w-1/2 w-full pl-3 rounded-lg">
+        <p class="text-4xl font-bold mb-5">{{event.name}}</p>
         <p class="text-lg my-2"><span class="font-bold">Category:</span> {{event.category.name}}</p>
         <p class="text-lg my-2"><span class="font-bold">Description:</span> {{event.description}}</p>
         <p class="text-lg my-2 font-bold">Participants: </p>
         <div>
             <ul class="list-disc ps-10">
-                {% for p in event.participants.all %}
-                    <li>{{p.name}}</li>
-                {% endfor %}
+                {% if event.confirm_participants.all %}
+                    {% for p in event.confirm_participants.all %}
+                        <li>{{p.username}}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>None</li>
+                {% endif %}
             </ul>
         </div>
-        <p class="text-lg my-2"><span class="font-bold">Date:</span> {{event.date}}</p>
+        <p class="text-lg my-2 flex items-center"><svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 48 0c26.5 0 48 21.5 48 48l0 48L0 160l0-48C0 85.5 21.5 64 48 64l48 0 0-32c0-17.7 14.3-32 32-32zM0 192l448 0 0 272c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 192zm64 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm128 0l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM64 400l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16z"/></svg> <span class="font-bold mr-2">Date: </span> {{event.date}}</p>
+        <p class="text-lg my-2 flex items-center"><svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg><span class="font-bold mr-2">Time: </span> {{event.time}}</p>
     </div>
-</body>
-</html>
+</div>
+{% endblock content %}

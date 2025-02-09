@@ -1,0 +1,15 @@
+{% extends "dashboard.html" %}
+{% block table_block %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{form}}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="bg-green-500 px-3 py-1 font-bold mb-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <button type="submit">Submit</button>
+</form>
+{% endblock table_block %}
