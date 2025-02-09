@@ -7,6 +7,11 @@
         <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
           <th class="p-4">
             <p class="text-sm leading-none font-bold">
+                Username
+            </p>
+          </th>
+          <th class="p-4">
+            <p class="text-sm leading-none font-bold">
                 Name
             </p>
           </th>
@@ -27,6 +32,11 @@
       <tbody>
         {% for event in participants %}
         <tr class="hover:bg-slate-50 border-b-2">
+            <td class="p-4">
+              <p class="text-sm">
+                {{event.username}}
+              </p>
+            </td>
             <td class="p-4">
               <p class="text-sm">
                 {{event.first_name}} {{event.last_name}}

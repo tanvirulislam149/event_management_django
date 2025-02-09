@@ -72,7 +72,7 @@ def activate_link(request, user_id, token):
         return render("Invalid token or id")
     
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def create_group(request):
     if request.method == "POST":
         form = CreateGroupForm(request.POST)
@@ -90,7 +90,7 @@ def create_group(request):
         return render(request, "admin/create_group.html", context)
     
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def update_group(request, id):
     group = Group.objects.get(id = id)
     if request.method == "POST":
@@ -109,7 +109,7 @@ def update_group(request, id):
         return render(request, "admin/create_group.html", context)
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def delete_group(request, id):
     if request.method == "POST":
         group = Group.objects.get(id = id)
@@ -118,7 +118,7 @@ def delete_group(request, id):
 
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def show_group(request):
     groups = Group.objects.all()
     context = {
@@ -129,7 +129,7 @@ def show_group(request):
     return render(request, "admin/show_groups.html", context)
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def change_role(request, id):
     user = User.objects.get(id = id)
     if request.method == "POST":

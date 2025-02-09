@@ -27,8 +27,10 @@ def is_user(user):
 # @user_passes_test(is_organizer_or_admin)
 def dashboard(request):
     if is_user(request.user):
+        users = User.objects.prefetch_related("events").get(id = request.user.id)
         context = {
-            "is_user": True
+            "is_user": True,
+            "users": users
         }
         return render(request, "event_table.html", context)
 
@@ -68,7 +70,7 @@ def dashboard(request):
 #     pass
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def show_participant(request):
     participants = User.objects.all()
     context = {
@@ -79,7 +81,7 @@ def show_participant(request):
     return render(request, "participants.html", context)
 
 @login_required
-@user_passes_test(is_organizer_or_admin)
+@user_passes_test(is_organizer_or_admin, "no_permission")
 def show_category(request):
     category = Category.objects.all()
     context = {
@@ -98,14 +100,13 @@ def details(request, id):
     return render(request, "details.html", context)
 
 @login_required
-@user_passes_test(is_organizer_or_admin)
+@user_passes_test(is_organizer_or_admin, "no_permission")
 def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form
             event_form = EventModelForm(request.POST)
             if event_form.is_valid():
                 event_form.save()
-                print("check 2")
                 messages.success(request, "Event saved successfully.")
             
         # elif pageId == 2:  # 2 ==> shows create participant form
@@ -128,7 +129,7 @@ def create_event(request, pageId):
         cat_form = CategoryModelForm()
         context = {
             "type": "create",
-            "form": event_form if pageId == 1 else cat_form,
+            "form": event_form if pageId == 1 else cat_form,  # decides which form to render
             "pageId": pageId,
             "is_admin": is_admin(request.user),
             "is_organizer": is_organizer_or_admin(request.user),
@@ -136,17 +137,15 @@ def create_event(request, pageId):
         return render(request, "create_event.html", context)
 
 @login_required
-@user_passes_test(is_organizer_or_admin)
+@user_passes_test(is_organizer_or_admin, "no_permission")
 def update_event(request, pageId, eventId):
     event = None
     if(request.method == "POST"):
         if pageId == 1:  # 
             event = Event.objects.get(id = eventId)
             event_form = EventModelForm(request.POST, instance = event)
-            print("check 1")
             if event_form.is_valid():
                 event_form.save()
-                print("check 2")
                 messages.success(request, "Event saved successfully.")
             
         # elif pageId == 2:
@@ -176,7 +175,7 @@ def update_event(request, pageId, eventId):
         elif pageId == 3:
             event = Category.objects.get(id = eventId)
             
-        print(event)
+        
         event_form = EventModelForm(instance = event)
         # Participant_form = ParticipantsModelForm(instance = event)
         cat_form = CategoryModelForm(instance = event)
@@ -190,7 +189,7 @@ def update_event(request, pageId, eventId):
         return render(request, "create_event.html", context)
         
 @login_required
-@user_passes_test(is_organizer_or_admin)
+@user_passes_test(is_organizer_or_admin, "no_permission")
 def delete_event(request, id):
     if request.method == "POST":
         event = Event.objects.get(id = id)
@@ -202,7 +201,7 @@ def delete_event(request, id):
         return redirect('dashboard')
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_admin, "no_permission")
 def delete_participants(request, id):
     if request.method == "POST":
         event = User.objects.get(id = id)
@@ -214,7 +213,7 @@ def delete_participants(request, id):
         return redirect('show_participants')
 
 @login_required
-@user_passes_test(is_organizer_or_admin)
+@user_passes_test(is_organizer_or_admin, "no_permission")
 def delete_category(request, id):
     if request.method == "POST":
         event = Category.objects.get(id = id)
@@ -224,3 +223,13 @@ def delete_category(request, id):
     else:
         messages.error(request, 'Something went wrong')
         return redirect('show_category')
+    
+
+@login_required
+def accept_invitation(request, event_id):
+    event = Event.objects.get(id = event_id)
+    if event.confirm_participants.filter(id = request.user.id).exists():
+        return redirect("no_permission")
+    else:
+        event.confirm_participants.add(request.user)
+        return redirect("dashboard")
