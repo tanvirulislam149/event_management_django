@@ -8,8 +8,8 @@
         <p class="text-lg my-2 font-bold">Participants: </p>
         <div>
             <ul class="list-disc ps-10">
-                {% if event.participants.all %}
-                    {% for p in event.participants.all %}
+                {% if event.confirm_participants.all %}
+                    {% for p in event.confirm_participants.all %}
                         <li>{{p.username}}</li>
                     {% endfor %}
                 {% else %}

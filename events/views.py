@@ -34,7 +34,9 @@ def dashboard(request):
         }
         return render(request, "user_dashboard.html", context)
 
-    events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
+    base_query = Event.objects.select_related("category").annotate(confirmed_participants_count=Count("confirm_participants"))
+    events = base_query.all()
+
     event_count = Event.objects.aggregate(
         events=Count("id"),
         upcoming = Count("id", filter=Q(date__gt = datetime.now().date())),
@@ -48,12 +50,12 @@ def dashboard(request):
     upcoming = request.GET.get("upcoming")
     past = request.GET.get("past")
     if upcoming:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__gt = datetime.now().date())
+        events = base_query.filter(date__gt = datetime.now().date())
         print(events)
     elif past:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).filter(date__lt = datetime.now().date())
+        events = base_query.filter(date__lt = datetime.now().date())
     else:
-        events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
+        events = base_query.all()
     
     context = {
         "events": events,
