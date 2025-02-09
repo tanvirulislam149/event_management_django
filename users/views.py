@@ -82,7 +82,12 @@ def create_group(request):
             return redirect("create_group")
     else:
         form = CreateGroupForm()
-        return render(request, "admin/create_group.html", {"form": form})
+        context = {
+            "form": form,
+            "is_admin": is_admin(request.user),
+            "is_organizer": is_organizer_or_admin(request.user),
+        }
+        return render(request, "admin/create_group.html", context)
     
 @login_required
 @user_passes_test(is_admin)
@@ -96,7 +101,12 @@ def update_group(request, id):
             return redirect("create_group")
     else:
         form = CreateGroupForm(instance = group)
-        return render(request, "admin/create_group.html", {"form": form})
+        context = {
+            "form": form,
+            "is_admin": is_admin(request.user),
+            "is_organizer": is_organizer_or_admin(request.user),
+        }
+        return render(request, "admin/create_group.html", context)
 
 @login_required
 @user_passes_test(is_admin)
@@ -111,7 +121,12 @@ def delete_group(request, id):
 @user_passes_test(is_admin)
 def show_group(request):
     groups = Group.objects.all()
-    return render(request, "admin/show_groups.html", {"groups": groups})
+    context = {
+        "groups": groups,
+        "is_admin": is_admin(request.user),
+        "is_organizer": is_organizer_or_admin(request.user),
+    }
+    return render(request, "admin/show_groups.html", context)
 
 @login_required
 @user_passes_test(is_admin)
@@ -131,4 +146,9 @@ def change_role(request, id):
 
     else:
         form = ChangeGroupForm()
-        return render(request, "admin/change_role.html", {"form": form})
+        context = {
+            "form": form,
+            "is_admin": is_admin(request.user),
+            "is_organizer": is_organizer_or_admin(request.user),
+        }
+        return render(request, "admin/change_role.html", context)

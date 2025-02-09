@@ -72,7 +72,9 @@ def dashboard(request):
 def show_participant(request):
     participants = User.objects.all()
     context = {
-        "participants": participants
+        "participants": participants,
+        "is_admin": is_admin(request.user),
+        "is_organizer": is_organizer_or_admin(request.user),
     }
     return render(request, "participants.html", context)
 
@@ -81,7 +83,9 @@ def show_participant(request):
 def show_category(request):
     category = Category.objects.all()
     context = {
-        "category": category
+        "category": category,
+        "is_admin": is_admin(request.user),
+        "is_organizer": is_organizer_or_admin(request.user),
     }
     return render(request, "category.html", context)
 
@@ -125,7 +129,9 @@ def create_event(request, pageId):
         context = {
             "type": "create",
             "form": event_form if pageId == 1 else cat_form,
-            "pageId": pageId
+            "pageId": pageId,
+            "is_admin": is_admin(request.user),
+            "is_organizer": is_organizer_or_admin(request.user),
         }
         return render(request, "create_event.html", context)
 
@@ -177,7 +183,9 @@ def update_event(request, pageId, eventId):
         context = {
             "type": "update",
             "form": event_form if pageId == 1 else cat_form,
-            "pageId": pageId
+            "pageId": pageId,
+            "is_admin": is_admin(request.user),
+            "is_organizer": is_organizer_or_admin(request.user),
         }
         return render(request, "create_event.html", context)
         
