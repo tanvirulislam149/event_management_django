@@ -27,12 +27,12 @@ def is_user(user):
 # @user_passes_test(is_organizer_or_admin)
 def dashboard(request):
     if is_user(request.user):
-        users = User.objects.prefetch_related("events").get(id = request.user.id)
+        users = User.objects.prefetch_related("confirmed_events").get(id = request.user.id)
         context = {
             "is_user": True,
             "users": users
         }
-        return render(request, "event_table.html", context)
+        return render(request, "user_dashboard.html", context)
 
     events = Event.objects.select_related("category").annotate(nums_of_participants=Count("participants")).all()
     event_count = Event.objects.aggregate(

@@ -1,0 +1,86 @@
+{% extends "dashboard.html" %}
+{% block user_dashboard %}
+<div class="px-10">
+    <h1 class="text-center text-3xl font-bold py-10">My Events</h1>
+    <table class="w-full text-left table-auto min-w-max text-slate-800">
+        <thead>
+          <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                #
+              </p>
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                  Name
+              </p>
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Category
+              </p>
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Date 
+              </p>
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Time 
+              </p>
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Location
+              </p>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in users.confirmed_events.all %}
+            <tr class="hover:bg-slate-50 border-b-2">
+              <td class="p-4">
+                <p class="text-sm">
+                  {{forloop.counter}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.name}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.category.name}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.date}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.time}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.location}}
+                </p>
+              </td>
+              <td class="p-4">
+                  <a href="{% url "details" event.id %}">
+                      <button class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                          Details
+                      </button>
+                  </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock user_dashboard %}

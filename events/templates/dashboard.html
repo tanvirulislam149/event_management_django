@@ -2,8 +2,8 @@
 {% block content %}
     {% if is_user %}
         <div>
-            <h1>This is user dashboard</h1>
-            {{users.username}}
+            {% block user_dashboard %}
+            {% endblock user_dashboard %}
         </div>
     {% else %}
         <div class="pt-0">
