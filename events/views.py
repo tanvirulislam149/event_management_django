@@ -106,7 +106,7 @@ def details(request, id):
 def create_event(request, pageId):
     if(request.method == "POST"):
         if pageId == 1:  # 1 => shows create event form
-            event_form = EventModelForm(request.POST)
+            event_form = EventModelForm(request.POST, request.FILES)
             if event_form.is_valid():
                 event_form.save()
                 messages.success(request, "Event saved successfully.")
@@ -145,7 +145,7 @@ def update_event(request, pageId, eventId):
     if(request.method == "POST"):
         if pageId == 1:  # 
             event = Event.objects.get(id = eventId)
-            event_form = EventModelForm(request.POST, instance = event)
+            event_form = EventModelForm(request.POST, request.FILES, instance = event)
             if event_form.is_valid():
                 event_form.save()
                 messages.success(request, "Event saved successfully.")

@@ -172,3 +172,5 @@ EMAIL_HOST_PASSWORD= config("EMAIL_HOST_PASSWORD")
 
 
 LOGIN_URL = '/users/login/'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

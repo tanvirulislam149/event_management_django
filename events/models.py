@@ -17,6 +17,7 @@ class Event(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="events", default = 1)
     participants = models.ManyToManyField(User, related_name="events")
     confirm_participants = models.ManyToManyField(User, related_name="confirmed_events")
+    image = models.ImageField(upload_to = "events_assets", blank=True, null = True, default="default_image.jpg")
 
     def __str__(self):
         return self.name

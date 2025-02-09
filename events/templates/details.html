@@ -1,7 +1,15 @@
 {% extends "base_home.html" %}
 {% block content %}
-<div class="flex justify-center mt-20">
-    <div class="sm:w-3/4 w-full m-3 p-4 shadow-2xl rounded-lg">
+{% load static %}
+<div class="sm:flex justify-center mt-20 sm:mx-20 m-2">
+    <div class="sm:w-1/2 w-full">
+        {% if event.image %}
+            <img class="w-full" src="{{event.image.url}}" alt="">
+        {% else %}
+            <img class="w-full" src="{% static "images/default_image.jpg" %}" alt="">
+        {% endif %}
+    </div>
+    <div class="sm:w-1/2 w-full pl-3 rounded-lg">
         <p class="text-4xl font-bold mb-5">{{event.name}}</p>
         <p class="text-lg my-2"><span class="font-bold">Category:</span> {{event.category.name}}</p>
         <p class="text-lg my-2"><span class="font-bold">Description:</span> {{event.description}}</p>

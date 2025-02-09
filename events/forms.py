@@ -60,7 +60,7 @@ class EventModelForm(StyledFormMixin, ModelForm):
     
     class Meta:
         model = Event
-        fields = ["name", "description", "location", "category", "date", "time", "participants"]
+        fields = ["name", "description", "location", "category", "date", "time", "participants", "image"]
         widgets = {
             "name": widgets.TextInput(),
             "description": widgets.Textarea(),
