@@ -120,7 +120,7 @@ def delete_group(request, id):
 @login_required
 @user_passes_test(is_admin, "no_permission")
 def show_group(request):
-    groups = Group.objects.all()
+    groups = Group.objects.prefetch_related("permissions").all()
     context = {
         "groups": groups,
         "is_admin": is_admin(request.user),

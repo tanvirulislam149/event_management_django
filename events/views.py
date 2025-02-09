@@ -44,7 +44,7 @@ def dashboard(request):
         todays_count = Count("id", filter=Q(date = datetime.now().date()))
     )
     participant_count = User.objects.all().count()
-    category_count = Category.objects.all().count()
+    # category_count = Category.objects.all().count()
     todays_events = Event.objects.filter(date= datetime.now().date())
     
     upcoming = request.GET.get("upcoming")
@@ -61,7 +61,7 @@ def dashboard(request):
         "events": events,
         "event_count": event_count,
         "participant_count": participant_count,
-        "category_count": category_count,
+        # "category_count": category_count,
         "todays_events": todays_events,
         "is_admin": is_admin(request.user),
         "is_organizer": is_organizer_or_admin(request.user),
