@@ -9,7 +9,7 @@ def event_confirm_mail(sender, instance, **kwargs):
     print("signal save")
     user_emails = [user.email for user in instance.participants.all()]
     print(user_emails, instance.participants.all())
-    activation_link = f"{config("FRONTEND_URL")}/events/accept_invitation/{instance.id}/"
+    activation_link = f"{config('FRONTEND_URL')}/events/accept_invitation/{instance.id}/"
     message = f"Please accept the invitation for {instance.name}. Click the link to accept invitation - {activation_link}"
     
     try:
