@@ -9,8 +9,9 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, DeleteView
 from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -91,19 +92,6 @@ class Show_participants(TemplateView):
         print(context)
         return render(request, self.template_name, context)
 
-
-# @login_required
-# @user_passes_test(is_organizer_or_admin, "no_permission")
-# def show_category(request):
-#     category = Category.objects.all()
-#     context = {
-#         "category": category,
-#         "is_admin": is_admin(request.user),
-#         "is_organizer": is_organizer_or_admin(request.user),
-#     }
-#     return render(request, "category.html", context)
-
-
 show_category_decorator = [login_required, user_passes_test(is_organizer_or_admin, "no_permission")]
 @method_decorator(show_category_decorator, name="dispatch")
 class Show_category(ListView):
@@ -126,42 +114,50 @@ def details(request, id):
     }
     return render(request, "details.html", context)
 
-@login_required
-@user_passes_test(is_organizer_or_admin, "no_permission")
-def create_event(request, pageId):
-    if(request.method == "POST"):
-        if pageId == 1:  # 1 => shows create event form
-            event_form = EventModelForm(request.POST, request.FILES)
-            if event_form.is_valid():
-                event_form.save()
-                messages.success(request, "Event saved successfully.")
-            
-        # elif pageId == 2:  # 2 ==> shows create participant form
-        #     event_form = ParticipantsModelForm(request.POST)
-        #     if event_form.is_valid():
-        #         event_form.save()
-        #         messages.success(request, "Participant created successfully.")
+create_event_decorator = [login_required, user_passes_test(is_organizer_or_admin, "no_permission")]
+@method_decorator(create_event_decorator, name="dispatch")
+class Create_event(CreateView):
+    model = Event
+    form_class = EventModelForm
+    template_name = "create_event.html"
 
-        elif pageId == 3:
-            event_form = CategoryModelForm(request.POST)
-            if event_form.is_valid():
-                event_form.save()
-                messages.success(request, "Category created successfully.")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["type"] = "create"
+        context["pageId"] = self.kwargs.get("pageId")
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context
 
-        return redirect("create_event", pageId)
+    def post(self, request, *args, **kwargs):
+        event_form = EventModelForm(request.POST, request.FILES)
+        if event_form.is_valid():
+            event_form.save()
+            messages.success(request, "Event saved successfully.")
+        return redirect("create_event", self.kwargs.get("pageId"))
         
-    else :
-        event_form = EventModelForm()
-        # Participant_form = ParticipantsModelForm()
-        cat_form = CategoryModelForm()
-        context = {
-            "type": "create",
-            "form": event_form if pageId == 1 else cat_form,  # decides which form to render
-            "pageId": pageId,
-            "is_admin": is_admin(request.user),
-            "is_organizer": is_organizer_or_admin(request.user),
-        }
-        return render(request, "create_event.html", context)
+
+create_category_decorator = [login_required, user_passes_test(is_organizer_or_admin, "no_permission")]
+@method_decorator(create_category_decorator, name="dispatch")
+class Create_category(CreateView):
+    model = Category 
+    form_class = CategoryModelForm 
+    template_name = "create_event.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["type"] = "create"
+        context["pageId"] = self.kwargs.get("pageId")
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        cat_form = CategoryModelForm(request.POST, request.FILES)
+        if cat_form.is_valid():
+            cat_form.save()
+            messages.success(request, "Category saved successfully.")
+        return redirect("create_category", self.kwargs.get("pageId"))
 
 @login_required
 @user_passes_test(is_organizer_or_admin, "no_permission")
@@ -174,14 +170,6 @@ def update_event(request, pageId, eventId):
             if event_form.is_valid():
                 event_form.save()
                 messages.success(request, "Event saved successfully.")
-            
-        # elif pageId == 2:
-        #     event = User.objects.get(id = eventId)
-        #     event_form = ParticipantsModelForm(request.POST, instance = event)
-        #     if event_form.is_valid():
-        #         print(event_form.cleaned_data)
-        #         event_form.save()
-        #         messages.success(request, "Participant updated successfully.")
 
         elif pageId == 3:
             event = Category.objects.get(id = eventId)
@@ -204,7 +192,6 @@ def update_event(request, pageId, eventId):
             
         
         event_form = EventModelForm(instance = event)
-        # Participant_form = ParticipantsModelForm(instance = event)
         cat_form = CategoryModelForm(instance = event)
         context = {
             "type": "update",
@@ -215,17 +202,13 @@ def update_event(request, pageId, eventId):
         }
         return render(request, "create_event.html", context)
         
-@login_required
-@user_passes_test(is_organizer_or_admin, "no_permission")
-def delete_event(request, id):
-    if request.method == "POST":
-        event = Event.objects.get(id = id)
-        event.delete()
-        messages.success(request, "Event deleted")
-        return redirect('dashboard')
-    else:
-        messages.error(request, 'Something went wrong')
-        return redirect('dashboard')
+
+delete_event_decorator = [login_required, user_passes_test(is_organizer_or_admin, "no_permission")]
+@method_decorator(delete_event_decorator, name="dispatch")
+class Delete_event(DeleteView):
+    model = Event
+    pk_url_kwarg = 'id' 
+    success_url = reverse_lazy("dashboard")
 
 @login_required
 @user_passes_test(is_admin, "no_permission")
