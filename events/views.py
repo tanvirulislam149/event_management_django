@@ -9,6 +9,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 from django.utils.decorators import method_decorator
 
 
@@ -91,16 +92,31 @@ class Show_participants(TemplateView):
         return render(request, self.template_name, context)
 
 
-@login_required
-@user_passes_test(is_organizer_or_admin, "no_permission")
-def show_category(request):
-    category = Category.objects.all()
-    context = {
-        "category": category,
-        "is_admin": is_admin(request.user),
-        "is_organizer": is_organizer_or_admin(request.user),
-    }
-    return render(request, "category.html", context)
+# @login_required
+# @user_passes_test(is_organizer_or_admin, "no_permission")
+# def show_category(request):
+#     category = Category.objects.all()
+#     context = {
+#         "category": category,
+#         "is_admin": is_admin(request.user),
+#         "is_organizer": is_organizer_or_admin(request.user),
+#     }
+#     return render(request, "category.html", context)
+
+
+show_category_decorator = [login_required, user_passes_test(is_organizer_or_admin, "no_permission")]
+@method_decorator(show_category_decorator, name="dispatch")
+class Show_category(ListView):
+    model = Category
+    template_name = "category.html"
+    queryset = Category.objects.all()
+    context_object_name = "category"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context
 
 
 def details(request, id):
