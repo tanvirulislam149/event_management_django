@@ -8,6 +8,9 @@ from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.generic.base import TemplateView
+from django.utils.decorators import method_decorator
+
 
 # Create your views here.
 
@@ -68,19 +71,25 @@ def dashboard(request):
     }
     return render(request, "event_table.html", context)
 
-# def show_upcoming_events(request):
-#     pass
 
-@login_required
-@user_passes_test(is_admin, "no_permission")
-def show_participant(request):
-    participants = User.objects.all()
-    context = {
-        "participants": participants,
-        "is_admin": is_admin(request.user),
-        "is_organizer": is_organizer_or_admin(request.user),
-    }
-    return render(request, "participants.html", context)
+show_participant_decorator = [login_required, user_passes_test(is_admin, "no_permission")]
+@method_decorator(show_participant_decorator, name="dispatch")
+class Show_participants(TemplateView):
+    template_name = "participants.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        participants = User.objects.all()
+        context["participants"] = participants
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        print(context)
+        return render(request, self.template_name, context)
+
 
 @login_required
 @user_passes_test(is_organizer_or_admin, "no_permission")

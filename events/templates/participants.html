@@ -52,19 +52,19 @@
                 {{event.groups.first}}
               </p>
             </td>
-            <td class="p-4">
-              <a href="{% url "change_role" id=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+            {% comment %} <td class="p-4">
+              <a href="{% url 'change_role' id=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
                 Change Role 
               </a>
             </td>
             <td class="p-4">
-                <form action="{% url "delete_participants" event.id %}" method="post">
+                <form action="{% url 'delete_participants' event.id %}" method="post">
                     {% csrf_token %}
                     <button class="text-sm font-bold rounded-full bg-red-300 px-3 py-1.5">
                         Delete
                     </button>
                 </form>
-            </td>
+            </td> {% endcomment %}
           </tr>
         {% endfor %}
       </tbody>
