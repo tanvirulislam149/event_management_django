@@ -1,8 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Permission, Group
+from django.contrib.auth.models import Permission, Group
 from events.forms import StyledFormMixin 
 from django.core.exceptions import ValidationError
 from django import forms
+from django.contrib.auth import get_user_model
+
+User = get_user_model() 
 
 class CustomRegisterForm(StyledFormMixin, UserCreationForm):
     class Meta:

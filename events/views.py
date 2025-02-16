@@ -6,12 +6,14 @@ from events.models import Event, Category
 from django.db.models import Count
 from django.db.models import Q
 from datetime import datetime
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, CreateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+
+User = get_user_model() 
 
 
 # Create your views here.

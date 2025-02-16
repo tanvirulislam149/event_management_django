@@ -52,7 +52,7 @@
                 {{event.groups.first}}
               </p>
             </td>
-            {% comment %} <td class="p-4">
+            <td class="p-4">
               <a href="{% url 'change_role' id=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
                 Change Role 
               </a>
@@ -64,7 +64,7 @@
                         Delete
                     </button>
                 </form>
-            </td> {% endcomment %}
+            </td>
           </tr>
         {% endfor %}
       </tbody>

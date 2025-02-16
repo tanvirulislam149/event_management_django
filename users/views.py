@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator 
 from users.forms import CreateGroupForm, ChangeGroupForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
+
+User = get_user_model() 
 
 
 
