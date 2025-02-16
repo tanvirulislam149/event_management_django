@@ -168,7 +168,8 @@ class ProfileView(TemplateView):
         user = self.request.user 
         context = super().get_context_data(**kwargs)
         context["user"] = user
-        context["is_user"] = True
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
         return context 
     
 class EditProfile(UpdateView):
@@ -179,7 +180,8 @@ class EditProfile(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_user"] = True
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
         return context 
     
     def get_object(self):
