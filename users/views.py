@@ -4,11 +4,12 @@ from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator 
-from users.forms import CreateGroupForm, ChangeGroupForm
+from users.forms import CreateGroupForm, ChangeGroupForm, EditCustomUserForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
 
 User = get_user_model() 
 
@@ -170,16 +171,24 @@ class ProfileView(TemplateView):
         context["is_user"] = True
         return context 
     
-class EditProfile(TemplateView):
+class EditProfile(UpdateView):
+    model = User
     template_name = "user/edit_profile.html"
+    form_class = EditCustomUserForm
+    success_url = reverse_lazy("edit_profile")
 
     def get_context_data(self, **kwargs):
-        # user = self.request.user 
         context = super().get_context_data(**kwargs)
-        # context["user"] = user
         context["is_user"] = True
         return context 
+    
+    def get_object(self):
+        return self.request.user
 
+    def form_valid(self, form):
+        form.save()
+        return redirect("edit_profile")
+    
 
 class ChangePassword(TemplateView):
     template_name = "user/change_password.html"
