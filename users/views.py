@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator 
 from users.forms import CreateGroupForm, ChangeGroupForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
 
 
 
@@ -152,3 +154,36 @@ def change_role(request, id):
             "is_organizer": is_organizer_or_admin(request.user),
         }
         return render(request, "admin/change_role.html", context)
+    
+
+@method_decorator(login_required, name="dispatch")
+class ProfileView(TemplateView):
+    template_name = "user/my_profile.html"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user 
+        context = super().get_context_data(**kwargs)
+        context["user"] = user
+        context["is_user"] = True
+        return context 
+    
+class EditProfile(TemplateView):
+    template_name = "user/edit_profile.html"
+
+    def get_context_data(self, **kwargs):
+        # user = self.request.user 
+        context = super().get_context_data(**kwargs)
+        # context["user"] = user
+        context["is_user"] = True
+        return context 
+
+
+class ChangePassword(TemplateView):
+    template_name = "user/change_password.html"
+
+    def get_context_data(self, **kwargs):
+            # user = self.request.user 
+            context = super().get_context_data(**kwargs)
+            # context["user"] = user
+            context["is_user"] = True
+            return context 
