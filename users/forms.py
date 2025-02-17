@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import Permission, Group
 from events.forms import StyledFormMixin 
 from django.core.exceptions import ValidationError
@@ -50,4 +50,11 @@ class EditCustomUserForm(StyledFormMixin, forms.ModelForm):
         fields = ["first_name", "last_name", "profile_image", "phone"]
 
 class CustomPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
+    pass
+
+
+class CustomPasswordResetForm(StyledFormMixin, PasswordResetForm):
+    pass
+
+class CustomPasswordResetConfirmForm(StyledFormMixin, SetPasswordForm):
     pass
