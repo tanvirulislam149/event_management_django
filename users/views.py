@@ -4,12 +4,14 @@ from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator 
-from users.forms import CreateGroupForm, ChangeGroupForm, EditCustomUserForm
+from users.forms import CreateGroupForm, ChangeGroupForm, EditCustomUserForm, CustomPasswordChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import TemplateView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+
 
 User = get_user_model() 
 
@@ -192,8 +194,9 @@ class EditProfile(UpdateView):
         return redirect("edit_profile")
     
 
-class ChangePassword(TemplateView):
+class ChangePassword(PasswordChangeView):
     template_name = "user/change_password.html"
+    form_class = CustomPasswordChangeForm
 
     def get_context_data(self, **kwargs):
             # user = self.request.user 

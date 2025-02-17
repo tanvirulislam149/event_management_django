@@ -1,9 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import Permission, Group
 from events.forms import StyledFormMixin 
 from django.core.exceptions import ValidationError
 from django import forms
-from django.contrib.auth import get_user_model 
+from django.contrib.auth import get_user_model
 
 User = get_user_model() 
 
@@ -48,3 +48,6 @@ class EditCustomUserForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "profile_image", "phone"]
+
+class CustomPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
+    pass

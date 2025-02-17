@@ -7,17 +7,17 @@
         <div class="sm:ml-4">
             <p class="text-2xl font-bold">{{user.username.upper}}</p>
             <p>{{user.groups.first}}</p>
-            <p>Last Login: {{user.last_login}}</p>
+            <p><span class="font-bold">Last Login:</span> {{user.last_login}}</p>
         </div>
     </div>
     <div class="w-4/6 text-lg">
-        <div class="sm:flex justify-between my-3">
-            <p>First Name: {{user.first_name}}</p>
-            <p>Last Name: {{user.last_name}}</p>
+        <div class="sm:flex justify-between mt-2">
+            <p><span class="font-bold">First Name: </span>{{user.first_name}}</p>
+            <p><span class="font-bold">Last Name:</span> {{user.last_name}}</p>
         </div>
-        <div class="sm:flex justify-between my-3">
-            <p>Email: {{user.email}}</p>
-            <p>Phone: {{user.phone}}</p>
+        <div class="sm:flex justify-between">
+            <p><span class="font-bold">Email: </span>{{user.email}}</p>
+            <p><span class="font-bold">Phone: </span>{{user.phone}}</p>
         </div>
     </div>
 </div>
