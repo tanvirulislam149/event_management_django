@@ -1,7 +1,24 @@
 {% extends "dashboard.html" %}
 {% block user_dashboard %}
 <div>
-    <h1>This is my profile</h1>
-    {{user}}
+    <h1 class="text-3xl font-bold mb-10">My Profile</h1>
+    <div class="sm:flex ">
+        <img class="sm:w-3/12 w-full" src="{{user.profile_image.url}}" alt="">
+        <div class="sm:ml-4">
+            <p class="text-2xl font-bold">{{user.username.upper}}</p>
+            <p>{{user.groups.first}}</p>
+            <p>Last Login: {{user.last_login}}</p>
+        </div>
+    </div>
+    <div class="w-4/6 text-lg">
+        <div class="sm:flex justify-between my-3">
+            <p>First Name: {{user.first_name}}</p>
+            <p>Last Name: {{user.last_name}}</p>
+        </div>
+        <div class="sm:flex justify-between my-3">
+            <p>Email: {{user.email}}</p>
+            <p>Phone: {{user.phone}}</p>
+        </div>
+    </div>
 </div>
 {% endblock user_dashboard %}
