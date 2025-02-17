@@ -1,0 +1,17 @@
+{% extends "dashboard.html" %}
+{% block user_dashboard %}
+<div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="bg-green-500 px-3 py-1 font-bold mb-3">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <button class="bg-red-500 text-white px-2 py-2 font-bold" type="submit">Edit Profile</button>
+    </form>
+</div>
+{% endblock user_dashboard %}

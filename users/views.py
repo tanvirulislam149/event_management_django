@@ -2,10 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from users.forms import CustomRegisterForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator 
-from users.forms import CreateGroupForm, ChangeGroupForm
+from users.forms import CreateGroupForm, ChangeGroupForm, EditCustomUserForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomPasswordResetConfirmForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.generic import TemplateView, UpdateView
+from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+
+
+User = get_user_model() 
 
 
 
@@ -152,3 +160,76 @@ def change_role(request, id):
             "is_organizer": is_organizer_or_admin(request.user),
         }
         return render(request, "admin/change_role.html", context)
+    
+
+@method_decorator(login_required, name="dispatch")
+class ProfileView(TemplateView):
+    template_name = "user/my_profile.html"
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user 
+        context = super().get_context_data(**kwargs)
+        context["user"] = user
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context 
+    
+class EditProfile(UpdateView):
+    model = User
+    template_name = "user/edit_profile.html"
+    form_class = EditCustomUserForm
+    success_url = reverse_lazy("edit_profile")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_admin"] = is_admin(self.request.user)
+        context["is_organizer"] = is_organizer_or_admin(self.request.user)
+        return context 
+    
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        form.save()
+        return redirect("edit_profile")
+    
+
+class ChangePassword(PasswordChangeView):
+    template_name = "user/change_password.html"
+    form_class = CustomPasswordChangeForm
+
+    def get_context_data(self, **kwargs):
+            # user = self.request.user 
+            context = super().get_context_data(**kwargs)
+            # context["user"] = user
+            context["is_user"] = True
+            return context 
+
+
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'user/reset_password.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['protocol'] = 'https' if self.request.is_secure() else 'http'
+        context['domain'] = self.request.get_host()
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, 'Password reset email is sent. Please check your email.')
+        return super().form_valid(form)
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomPasswordResetConfirmForm
+    template_name = 'user/reset_password.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, 'Password reset successfully')
+        return super().form_valid(form)
+

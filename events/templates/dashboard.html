@@ -1,11 +1,11 @@
 {% extends "base_home.html" %}
 {% block content %}
-    {% if is_user %}
+    {% comment %} {% if is_user %}
         <div>
             {% block user_dashboard %}
             {% endblock user_dashboard %}
         </div>
-    {% else %}
+    {% else %} {% endcomment %}
         <div class="pt-0">
             <button onclick="sidebarToggle()" class="block sm:hidden mt-10 mx-4">
                 <svg class="block size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -13,11 +13,11 @@
                 </svg>
             </button>
             <div class="flex">
-                <div id="sidebar" class="w-3/4 sm:mt-6 mt-2 pt-1 sm:w-1/6 bg-gray-100 h-screen hidden sm:block">
+                <div id="sidebar" class="w-3/4 sm:mt-6 mt-2 pt-1 sm:w-1/6 bg-gray-100 min-h-screen hidden sm:block">
                     {% if is_admin %}
                         <a href="{% url "create_event" pageId=1 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Event</a>
                         <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Events</a>
-                        <a href="{% url "create_event" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
+                        <a href="{% url "create_category" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
                         <a href="{% url "show_category" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Category</a>
                         <a href="{% url "show_participants" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Participants</a>
                         <a href="{% url "create_group" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Group</a>
@@ -27,19 +27,19 @@
                         <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Events</a>
                         <a href="{% url "create_event" pageId=3 %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Create Category</a>
                         <a href="{% url "show_category" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Show Category</a>
-                    {% endif %}
-                    {% comment %} {% if user.groups.first == "Admin" %}
-                        <p>Admin ache</p>
                     {% else %}
-                        <p>Admin nai</p>
+                        <a href="{% url "dashboard" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">My Events</a>
                     {% endif %}
-                    {{user.groups.first}} {% endcomment %}
+                    <a href="{% url "my_profile" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">My Profile</a>
+                    <a href="{% url "edit_profile" %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Edit profile</a>
+                    <a href="{% url 'change_password' %}" class="block pl-5 text-black border-b-2 font-bold py-4 px-3 hover:bg-slate-300">Change Password</a>
                 </div>
                 <div class="w-full sm:w-5/6 p-4 sm:pt-10">
                     {% block table_block %}
                     {% endblock table_block %}
+                    {% block user_dashboard %}
+                    {% endblock user_dashboard %}
                 </div>
             </div>
         </div>
-    {% endif %}
 {% endblock content %}

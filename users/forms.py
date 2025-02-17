@@ -1,8 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Permission, Group
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.models import Permission, Group
 from events.forms import StyledFormMixin 
 from django.core.exceptions import ValidationError
 from django import forms
+from django.contrib.auth import get_user_model
+
+User = get_user_model() 
 
 class CustomRegisterForm(StyledFormMixin, UserCreationForm):
     class Meta:
@@ -40,3 +43,18 @@ class ChangeGroupForm(StyledFormMixin, forms.Form):
         widget=forms.Select,
         empty_label="Select a role"
     )
+
+class EditCustomUserForm(StyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "profile_image", "phone"]
+
+class CustomPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
+    pass
+
+
+class CustomPasswordResetForm(StyledFormMixin, PasswordResetForm):
+    pass
+
+class CustomPasswordResetConfirmForm(StyledFormMixin, SetPasswordForm):
+    pass
