@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, UpdateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
-from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordChangeDoneView
 
 
 User = get_user_model() 
@@ -201,8 +201,19 @@ class ChangePassword(PasswordChangeView):
     def get_context_data(self, **kwargs):
             # user = self.request.user 
             context = super().get_context_data(**kwargs)
-            # context["user"] = user
-            context["is_user"] = True
+            context["is_admin"] = is_admin(self.request.user)
+            context["is_organizer"] = is_organizer_or_admin(self.request.user)
+            return context 
+
+
+class ChangePasswordDoneView(PasswordChangeDoneView):
+    template_name = "user/password_change_done.html"
+
+    def get_context_data(self, **kwargs):
+            # user = self.request.user 
+            context = super().get_context_data(**kwargs)
+            context["is_admin"] = is_admin(self.request.user)
+            context["is_organizer"] = is_organizer_or_admin(self.request.user)
             return context 
 
 
