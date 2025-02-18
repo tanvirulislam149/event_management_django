@@ -2,7 +2,7 @@
 {% block table_block %}
 <div class="bg-white p-5 pb-10">
     <h1 class="mt-2 mb-4 text-4xl font-bold">{% if type == "update" %}Update {% else %}Create {% endif %}{% if pageId == 1 %}event {% elif pageId == 2 %}participants {% else %} category{% endif %}</h1>
-    <div class="-full mx-auto">
+    <div class="w-full">
         <form class="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             {{form}}
