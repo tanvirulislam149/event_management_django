@@ -4,7 +4,7 @@
     <h1 class="text-center text-3xl font-bold py-10">My Events</h1>
     <table class="w-full text-left table-auto min-w-max text-slate-800">
         <thead>
-          <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
+          <tr class="text-slate-500 border-b border-slate-300 bg-white">
             <th class="p-4">
               <p class="text-sm leading-none font-bold">
                 #
@@ -40,7 +40,7 @@
         </thead>
         <tbody>
           {% for event in users.confirmed_events.all %}
-            <tr class="hover:bg-slate-50 border-b-2">
+            <tr class="hover:bg-gray-100 bg-white  border-b-2">
               <td class="p-4">
                 <p class="text-sm">
                   {{forloop.counter}}

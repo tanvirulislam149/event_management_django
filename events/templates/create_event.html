@@ -1,7 +1,8 @@
 {% extends "dashboard.html" %}
 {% block table_block %}
-<h1 class="text-center mt-4 text-4xl font-bold">{% if type == "update" %}Update {% else %}Create {% endif %}{% if pageId == 1 %}event {% elif pageId == 2 %}participants {% else %} category{% endif %}</h1>
-    <div class="sm:w-2/4 w-full mx-auto">
+<div class="bg-white p-5 pb-10">
+    <h1 class="mt-2 mb-4 text-4xl font-bold">{% if type == "update" %}Update {% else %}Create {% endif %}{% if pageId == 1 %}event {% elif pageId == 2 %}participants {% else %} category{% endif %}</h1>
+    <div class="w-full">
         <form class="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             {{form}}
@@ -16,4 +17,5 @@
             <button class="px-4 py-2 rounded-md text-white font-bold bg-red-500" type="submit">Submit</button>
         </form>
     </div>
+</div>
 {% endblock table_block %}

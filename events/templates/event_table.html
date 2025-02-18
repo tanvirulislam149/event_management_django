@@ -1,130 +1,137 @@
 {% extends "dashboard.html" %}
 {% block table_block %}
 {% load static %}
-<div class="mb-5 sm:flex gap-5">
-  <a href="{% url 'dashboard' %}" class="w-full inline-block bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.events}}</span> <br> Events</a>
-  <p class="w-full inline-block bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
-  <a href="{% url 'dashboard' %}?upcoming=True" class="w-full inline-block bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.upcoming}}</span> <br> Upcoming Events</a>
-  <a href="{% url 'dashboard' %}?past=True" class="w-full inline-block bg-gray-100 font-bold text-lg px-2 py-2 my-2 "><span class="text-6xl">{{event_count.past}}</span> <br> Past Events</a>
-</div>
-<div class="bg-gray-100 p-3 my-5">
-  <p class="text-lg font-bold pb-2">Today's Events</p>
-  {% for event in todays_events %}
-    <div class="border-b-2 py-2">
-      <p>Event Name: <span class="font-bold">{{event.name.upper}}</span> Date: {{event.date}}. Location: {{event.location}}</p>
-      {% comment %} <p></p> {% endcomment %}
+<div class="sm:flex gap-5">
+  <div class="sm:w-1/2">
+    <div class="grid grid-cols-2 gap-4">
+      <a href="{% url 'dashboard' %}" class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.events}}</span> <br> Events</a>
+      <p class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
+      <a href="{% url 'dashboard' %}?upcoming=True" class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.upcoming}}</span> <br> Upcoming Events</a>
+      <a href="{% url 'dashboard' %}?past=True" class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.past}}</span> <br> Past Events</a>
     </div>
-  {% endfor %}
+  </div>
+  <div class="bg-white rounded-lg py-3 px-5 mt-4 sm:mt-0 sm:h-56 sm:w-1/2 overflow-y-scroll todays_event">
+    <p class="text-lg border-b-2 mb-1 pb-1 font-bold">Today's Events | {% now "M, d" %}</p>
+    {% for event in todays_events %}
+      <div class="py-1">
+        <p><span class="font-bold">{{event.name.upper}}</span></p>
+        <p>Time: {{event.time}} Location: {{event.location}}</p>
+      </div>
+      <hr>
+    {% endfor %}
+  </div>
 </div>
-<div class="relative overflow-x-auto flex flex-col w-full text-gray-700 rounded-lg bg-clip-border">
-    <p class="text-center text-2xl font-bold mb-5">Events</p>
-    <table class="w-full text-left table-auto min-w-max text-slate-800">
-      <thead>
-        <tr class="text-slate-500 border-b border-slate-300 bg-slate-50">
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              #
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-                Name
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              Category
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              Date 
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              Time 
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              Location
-            </p>
-          </th>
-          <th class="p-4">
-            <p class="text-sm leading-none font-bold">
-              Nums of confirmed
-            </p>
-            <p class="text-sm leading-none font-bold">
-              Participants
-            </p>
-          </th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for event in events %}
-          <tr class="hover:bg-slate-50 border-b-2">
-            <td class="p-4">
-              <p class="text-sm">
-                {{forloop.counter}}
+<div>
+  <p class="text-center text-2xl font-bold my-5">Events</p>
+  <div class="overflow-x-auto flex flex-col w-full text-gray-700 bg-white rounded-lg bg-clip-border">
+      <table class="w-full text-left table-auto min-w-max text-slate-800">
+        <thead>
+          <tr class="text-slate-500 border-b border-slate-300 bg-white">
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                #
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.name}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                  Name
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.category.name}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Category
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.date}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Date 
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.time}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Time 
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.location}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Location
               </p>
-            </td>
-            <td class="p-4">
-              <p class="text-sm">
-                {{event.confirmed_participants_count}}
+            </th>
+            <th class="p-4">
+              <p class="text-sm leading-none font-bold">
+                Confirmed
               </p>
-            </td>
-            <td class="p-4">
-              <a href="{% url "update_event" pageId=1 eventId=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
-                Edit
-              </a>
-            </td>
-            <td class="p-4">
-                <form action="{% url "delete_event" event.id %}" method="post">
-                    {% csrf_token %}
-                    <button class="text-sm font-bold rounded-full bg-red-300 px-3 py-1.5">
-                        Delete
-                    </button>
-                </form>
-            </td>
-            <td class="p-4">
-                <a href="{% url "details" event.id %}">
-                    <button class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
-                        Details
-                    </button>
-                </a>
-            </td>
+              <p class="text-sm leading-none font-bold">
+                Participants
+              </p>
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>   
+        </thead>
+        <tbody>
+          {% for event in events %}
+            <tr class="hover:bg-gray-100 bg-white  border-b-2">
+              <td class="p-4">
+                <p class="text-sm">
+                  {{forloop.counter}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.name}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.category.name}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.date}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.time}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.location}}
+                </p>
+              </td>
+              <td class="p-4">
+                <p class="text-sm">
+                  {{event.confirmed_participants_count}}
+                </p>
+              </td>
+              <td class="p-4">
+                <a href="{% url "update_event" pageId=1 eventId=event.id %}" class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                  Edit
+                </a>
+              </td>
+              <td class="p-4">
+                  <form action="{% url "delete_event" event.id %}" method="post">
+                      {% csrf_token %}
+                      <button class="text-sm font-bold rounded-full bg-red-300 px-3 py-1.5">
+                          Delete
+                      </button>
+                  </form>
+              </td>
+              <td class="p-4">
+                  <a href="{% url "details" event.id %}">
+                      <button class="text-sm font-bold rounded-full bg-green-300 px-3 py-1.5">
+                          Details
+                      </button>
+                  </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div> 
+</div>  
 {% endblock table_block %}

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <style>
         .bg_image{
             background: url({% static "images/banner.png" %});
@@ -29,9 +29,9 @@
                   <div class="hidden sm:ml-6 sm:block">
                     <div class="flex space-x-4">
                       <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
-                      <a href="{% url "dashboard" %}" class="rounded-md px-3 py-2 text-md font-medium text-black" aria-current="page">Dashboard</a>
+                      <a href="{% url "dashboard" %}" class="rounded-md px-3 py-2 text-md font-bold text-black" aria-current="page">Dashboard</a>
                       {% if user.is_authenticated %}
-                        <div class="rounded-full w-10 h-10 bg-sky-500 text-lg font-medium flex justify-center items-center text-white">
+                        <div class="rounded-full w-10 h-10 bg-sky-500 text-lg font-bold flex justify-center items-center text-white">
                           <img class="w-10 h-10 rounded-full" src="{{user.profile_image.url}}" alt="">
                         </div>
                         <form action="{% url "logout" %}" method="post">
@@ -39,8 +39,8 @@
                           <button class="px-3 py-2 bg-sky-500 text-white rounded-lg">Log out</button>
                         </form>
                       {% else %}
-                        <a href="{% url "login" %}" class="rounded-lg px-3 py-2 text-md bg-sky-500 text-white font-medium ">Login</a>
-                        <a href="{% url "register" %}" class="rounded-lg px-3 py-2 text-md bg-sky-500 text-white font-medium ">Register</a>
+                        <a href="{% url "login" %}" class="rounded-lg px-3 py-2 text-md bg-sky-500 text-white font-bold ">Login</a>
+                        <a href="{% url "register" %}" class="rounded-lg px-3 py-2 text-md bg-sky-500 text-white font-bold ">Register</a>
                       {% endif %}
                     </div>
                   </div>
@@ -73,23 +73,23 @@
           <div class="hidden rounded-md bg-black" id="mobile_menu">
             <div class="space-y-1 px-2 pt-2 pb-3">
               <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
-              <a href="{% url "dashboard" %}" class="block rounded-md px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
+              <a href="{% url "dashboard" %}" class="block rounded-md px-3 py-2 text-base font-bold text-white" aria-current="page">Dashboard</a>
               {% if user.is_authenticated %}
-                <div class="rounded-full mx-auto w-10 h-10 bg-sky-500 text-lg font-medium flex justify-center items-center text-white"><p>{{user.username.upper|slice:"0:1"}}</p></div>
+                <div class="rounded-full mx-auto w-10 h-10 bg-sky-500 text-lg font-bold flex justify-center items-center text-white"><p>{{user.username.upper|slice:"0:1"}}</p></div>
                 <form action="{% url "logout" %}" method="post">
                   {% csrf_token %}
                   <button class="px-3 py-2 bg-sky-500 text-white rounded-lg w-full">Log out</button>
                 </form>
               {% else %}
-                <a href="{% url "login" %}" class="rounded-lg block px-3 py-2 text-md bg-sky-500 text-white font-medium ">Login</a>
-                <a href="{% url "register" %}" class="rounded-lg px-3 py-2 block text-md bg-sky-500 text-white font-medium ">Register</a>
+                <a href="{% url "login" %}" class="rounded-lg block px-3 py-2 text-md bg-sky-500 text-white font-bold ">Login</a>
+                <a href="{% url "register" %}" class="rounded-lg px-3 py-2 block text-md bg-sky-500 text-white font-bold ">Register</a>
               {% endif %}
             </div>
           </div>
       </div>  
     </nav>
 
-    <div class="pt-10 min-h-screen">
+    <div class="pt-10 min-h-screen bg-gray-200">
       {% block content %}
       {% endblock content %}
     </div>

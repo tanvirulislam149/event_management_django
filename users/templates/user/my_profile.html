@@ -1,16 +1,20 @@
 {% extends "dashboard.html" %}
 {% block user_dashboard %}
-<div>
+<div class="bg-white p-5 pb-10">
     <h1 class="text-3xl font-bold mb-10">My Profile</h1>
     <div class="sm:flex ">
-        <img class="sm:w-3/12 w-full" src="{{user.profile_image.url}}" alt="">
+        <img class="sm:w-4/12 w-full mb-3" src="{{user.profile_image.url}}" alt="">
         <div class="sm:ml-4">
             <p class="text-2xl font-bold">{{user.username.upper}}</p>
             <p>{{user.groups.first}}</p>
             <p><span class="font-bold">Last Login:</span> {{user.last_login}}</p>
+            <p><span class="font-bold">First Name: </span>{{user.first_name}}</p>
+            <p><span class="font-bold">Last Name:</span> {{user.last_name}}</p>
+            <p><span class="font-bold">Email: </span>{{user.email}}</p>
+            <p><span class="font-bold">Phone: </span>{{user.phone}}</p>
         </div>
     </div>
-    <div class="w-4/6 text-lg">
+    {% comment %} <div class="w-4/6 text-lg">
         <div class="sm:flex justify-between mt-2">
             <p><span class="font-bold">First Name: </span>{{user.first_name}}</p>
             <p><span class="font-bold">Last Name:</span> {{user.last_name}}</p>
@@ -19,6 +23,6 @@
             <p><span class="font-bold">Email: </span>{{user.email}}</p>
             <p><span class="font-bold">Phone: </span>{{user.phone}}</p>
         </div>
-    </div>
+    </div> {% endcomment %}
 </div>
 {% endblock user_dashboard %}

@@ -1,7 +1,8 @@
 {% extends "dashboard.html" %}
 {% block table_block %}
-<div>
-    <form action="" class="sm:w-3/4 w-full mx-2 sm:mx-auto my-4" method="post">
+<div class="bg-white p-5 pb-10">
+    <h1 class="text-3xl font-bold mb-10">Create Group</h1>
+    <form action="" class=" w-full mx-2 sm:mx-auto my-4" method="post">
         {% csrf_token %}
         {{form}}
         {% if messages %}
