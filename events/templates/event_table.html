@@ -2,7 +2,7 @@
 {% block table_block %}
 {% load static %}
 <div class="sm:flex gap-5">
-  <div class="w-1/2">
+  <div class="sm:w-1/2">
     <div class="grid grid-cols-2 gap-4">
       <a href="{% url 'dashboard' %}" class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.events}}</span> <br> Events</a>
       <p class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{participant_count}}</span> <br> Participants</p>
@@ -10,13 +10,14 @@
       <a href="{% url 'dashboard' %}?past=True" class="w-full inline-block bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.past}}</span> <br> Past Events</a>
     </div>
   </div>
-  <div class="bg-white rounded-lg py-3 px-5 h-56 w-1/2">
-    <p class="text-lg font-bold">Today's Events</p>
+  <div class="bg-white rounded-lg py-3 px-5 mt-4 sm:mt-0 sm:h-56 sm:w-1/2 overflow-y-scroll todays_event">
+    <p class="text-lg border-b-2 mb-1 pb-1 font-bold">Today's Events | {% now "M, d" %}</p>
     {% for event in todays_events %}
-      <div class="border-b-2 py-2">
-        <p>Event Name: <span class="font-bold">{{event.name.upper}}</span> Date: {{event.date}}. Location: {{event.location}}</p>
-        {% comment %} <p></p> {% endcomment %}
+      <div class="py-1">
+        <p><span class="font-bold">{{event.name.upper}}</span></p>
+        <p>Time: {{event.time}} Location: {{event.location}}</p>
       </div>
+      <hr>
     {% endfor %}
   </div>
 </div>
@@ -58,7 +59,7 @@
             </th>
             <th class="p-4">
               <p class="text-sm leading-none font-bold">
-                Nums of confirmed
+                Confirmed
               </p>
               <p class="text-sm leading-none font-bold">
                 Participants

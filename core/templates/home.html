@@ -1,42 +1,45 @@
 {% extends "base_home.html" %}
 {% block content %}
 {% load static %}
-  <!-- banner  -->
-  <section>
-    <div class="bg_image flex justify-center items-center">
-        <div class="text-white sm:text-7xl text-5xl font-bold banner_font text-center">
-            <p class="mb-2">UNIQUE</p>
-            <p class="mb-2">CREATIVE</p>
-            <p class="mb-2">EXTRA ORDINARY</p>
-        </div>
-    </div>
- </section>
-
- <section class="my-32">
-    <div class="text center">
-        <p class="text-center sm:text-6xl text-3xl banner_font mb-5">Corporate Events</p>
-        <p class="text-center sm:text-xl text-md text-gray-500">From a laid-back company picnic to a Great Gatsby themed holiday party, Event Nest</p>
-        <p class="text-center sm:text-xl text-md text-gray-500">Events delivers a top-notch corporate event that will leave a lasting impression on your attendees.</p>
-    </div>
-    <div class="sm:flex justify-evenly mt-10">
-        <div class="flex justify-center mb-4">
-            <div>
-                <img width="350" src="{% static 'images/annual_meetings.png' %}" alt="">
-                <p class="text-center text-2xl font-bold mt-3">Annual Meetings</p>
+  
+  <div class="bg-white">
+    <!-- banner  -->
+    <section>
+        <div class="bg_image flex justify-center items-center">
+            <div class="text-white sm:text-7xl text-5xl font-bold banner_font text-center">
+                <p class="mb-2">UNIQUE</p>
+                <p class="mb-2">CREATIVE</p>
+                <p class="mb-2">EXTRA ORDINARY</p>
             </div>
         </div>
-        <div class="flex justify-center"> 
-            <div>
-                <img width="350" src="{% static 'images/award_dinners.png' %}" alt="">
-                <p class="text-center text-2xl font-bold mt-3">Award Dinners</p>
+     </section>
+    
+     <section class="my-32">
+        <div class="text center">
+            <p class="text-center sm:text-6xl text-3xl banner_font mb-5">Corporate Events</p>
+            <p class="text-center sm:text-xl text-md text-gray-500">From a laid-back company picnic to a Great Gatsby themed holiday party, Event Nest</p>
+            <p class="text-center sm:text-xl text-md text-gray-500">Events delivers a top-notch corporate event that will leave a lasting impression on your attendees.</p>
+        </div>
+        <div class="sm:flex justify-evenly mt-10">
+            <div class="flex justify-center mb-4">
+                <div>
+                    <img width="350" src="{% static 'images/annual_meetings.png' %}" alt="">
+                    <p class="text-center text-2xl font-bold mt-3">Annual Meetings</p>
+                </div>
+            </div>
+            <div class="flex justify-center"> 
+                <div>
+                    <img width="350" src="{% static 'images/award_dinners.png' %}" alt="">
+                    <p class="text-center text-2xl font-bold mt-3">Award Dinners</p>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                <div>
+                    <img width="350" src="{% static 'images/holiday_parties.png' %}" alt="">
+                    <p class="text-center text-2xl font-bold mt-3">Holiday Parties</p>
+                </div>
             </div>
         </div>
-        <div class="flex justify-center">
-            <div>
-                <img width="350" src="{% static 'images/holiday_parties.png' %}" alt="">
-                <p class="text-center text-2xl font-bold mt-3">Holiday Parties</p>
-            </div>
-        </div>
-    </div>
- </section>
+     </section>
+  </div>
 {% endblock content %}

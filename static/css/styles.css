@@ -18,3 +18,14 @@ ul.errorlist {
   font-weight: 500;
   font-style: normal;
 }
+
+/* width */
+.todays_event::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Handle */
+.todays_event::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: 5px;
+}
