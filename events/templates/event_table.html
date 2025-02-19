@@ -1,7 +1,8 @@
 {% extends "dashboard.html" %}
 {% block table_block %}
 {% load static %}
-<div class="sm:flex gap-5">
+<div class="sm:flex gap-5">   
+  {% comment %} just checking {% endcomment %}
   <div class="sm:w-1/2">
     <div class="grid grid-cols-2 gap-4">
       <a href="{% url 'dashboard' %}" class="w-full inline-block shadow-lg bg-white rounded-lg font-bold text-lg px-4 py-2 "><span class="text-6xl">{{event_count.events}}</span> <br> Events</a>
