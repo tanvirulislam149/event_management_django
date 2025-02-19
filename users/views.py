@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordChangeDoneView
+from decouple import config
 
 
 User = get_user_model() 
@@ -56,7 +57,8 @@ def user_login(request):
         user = authenticate(request, username = username, password = password)
         if user is not None:
             login(request, user)
-            return redirect("home")
+            next_url = request.GET.get("next")
+            return redirect(f"{config('FRONTEND_URL')}{next_url}") if next_url else redirect("home")
         else:
             messages.error(request, "Wrong credentials. Please check again.")
 
