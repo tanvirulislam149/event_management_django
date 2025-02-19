@@ -75,7 +75,9 @@
               <!-- Current: "bg-gray-900 text-black", Default: "text-black hover:bg-gray-700 hover:text-black" -->
               <a href="{% url "dashboard" %}" class="block rounded-md px-3 py-2 text-base font-bold text-white" aria-current="page">Dashboard</a>
               {% if user.is_authenticated %}
-                <div class="rounded-full mx-auto w-10 h-10 bg-sky-500 text-lg font-bold flex justify-center items-center text-white"><p>{{user.username.upper|slice:"0:1"}}</p></div>
+                <div class="rounded-full mx-auto w-10 h-10 bg-sky-500 text-lg font-bold flex justify-center items-center text-white">
+                  <img class="w-10 h-10 rounded-full" src="{{user.profile_image.url}}" alt="">
+                </div>
                 <form action="{% url "logout" %}" method="post">
                   {% csrf_token %}
                   <button class="px-3 py-2 bg-sky-500 text-white rounded-lg w-full">Log out</button>
